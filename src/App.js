@@ -8,6 +8,7 @@ function App() {
   const [playlist, setPlaylist] = useState([]) // Image indices
   const [played, setPlayed] = useState([]) // Image indices
   const [playlistCursor, setPlaylistCursor] = useState(0)
+  const [preview, setPreview] = useState([])
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -92,6 +93,14 @@ function App() {
     return images[imageIndex]
   }
 
+  const updatePreview = () => {
+    console.log('updating preview')
+    const sliceStart = playlistCursor + 1
+    const imageIndices = playlist.slice(sliceStart, sliceStart + 10)
+    const imageUrls = imageIndices.map((query) => images[query])
+    setPreview(imageUrls)
+  }
+
   useEffect(() => {
     loadingRef.current = isLoadingImages
     imagesRef.current = images
@@ -108,7 +117,11 @@ function App() {
   useEffect(() => {
     const imagePlayed = playlist[playlistCursor]
     setPlayed([...played, imagePlayed])
+
+    updatePreview()
   }, [playlistCursor])
+
+  useEffect(updatePreview, [JSON.stringify(images), JSON.stringify(playlist)])
 
   return (
     <div
@@ -127,17 +140,21 @@ function App() {
             style={{
               position: 'absolute',
               bottom: 100,
-              left: '50%',
-              transform: 'translateX(-50%)',
               background: 'white',
               padding: '1em',
               fontWeight: 'bold',
-              borderRadius: '1em',
-              opacity: 0.5,
               display: 'flex',
+              width: '100%',
             }}
           >
             <button onClick={handleShuffleClick}>SHUFFLE</button>
+            {preview.map((url) => (
+              <img
+                src={url}
+                style={{ width: '200px', height: '100px' }}
+                key={url}
+              />
+            ))}
           </div>
         </div>
       ) : (
