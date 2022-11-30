@@ -11,7 +11,9 @@ function App() {
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
+  const playlistRef = useRef(playlist)
   const playlistCursorRef = useRef(playlistCursor)
+  const playedRef = useRef(played)
 
   const randomizeArray = (array) => {
     return array.sort((a, b) => {
@@ -45,6 +47,7 @@ function App() {
 
     setImages(objectUrls)
     setIsLoadingImages(false)
+    setPlayed([0])
 
     const indices = Array(objectUrls.length)
       .fill('')
@@ -92,13 +95,20 @@ function App() {
   useEffect(() => {
     loadingRef.current = isLoadingImages
     imagesRef.current = images
+    playlistRef.current = playlist
     playlistCursorRef.current = playlistCursor
+    playedRef.current = played
   })
 
   useEffect(() => {
     const htmlElem = document.querySelector('html')
     htmlElem.addEventListener('keydown', keyDownHandler)
   }, [])
+
+  useEffect(() => {
+    const imagePlayed = playlist[playlistCursor]
+    setPlayed([...played, imagePlayed])
+  }, [playlistCursor])
 
   useEffect(() => {})
 
