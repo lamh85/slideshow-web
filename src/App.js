@@ -4,12 +4,14 @@ import './App.css'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
-  const [playlist, setPlaylist] = useState() // Image indices
-  const [viewedPosition, setViewedPosition] = useState(0)
+  const [images, setImages] = useState([])
+  const [playlist, setPlaylist] = useState([]) // Image indices
+  const [played, setPlayed] = useState([]) // Image indices
+  const [playlistCursor, setPlaylistCursor] = useState(0)
 
   const loadingRef = useRef(isLoadingImages)
-  const imageDataUrlRef = useRef(playlist)
-  const viewedPositionRef = useRef(viewedPosition)
+  const imagesRef = useRef(images)
+  const playlistCursorRef = useRef(playlistCursor)
 
   const randomizeArray = (array) => {
     return array.sort((a, b) => {
@@ -41,20 +43,24 @@ function App() {
       objectUrls.push(objectUrl)
     }
 
-    setPlaylist(objectUrls)
-
+    setImages(objectUrls)
     setIsLoadingImages(false)
+
+    const indices = Array(objectUrls.length)
+      .fill('')
+      .map((_item, index) => index)
+    setPlaylist(indices)
   }
 
   const navigatePlaylist = (increment) => {
-    const maxPosition = imageDataUrlRef.current.length - 1
+    const maxPosition = imagesRef.current.length - 1
 
-    if (increment > 0 && viewedPositionRef.current == maxPosition) {
-      setViewedPosition(0)
-    } else if (increment < 0 && viewedPositionRef.current == 0) {
-      setViewedPosition(maxPosition)
+    if (increment > 0 && playlistCursorRef.current == maxPosition) {
+      setPlaylistCursor(0)
+    } else if (increment < 0 && playlistCursorRef.current == 0) {
+      setPlaylistCursor(maxPosition)
     } else {
-      setViewedPosition(viewedPositionRef.current + increment)
+      setPlaylistCursor(playlistCursorRef.current + increment)
     }
   }
 
@@ -78,10 +84,15 @@ function App() {
     navigatePlaylist(increment)
   }
 
+  const getCurrentImage = () => {
+    const imageIndex = playlist[playlistCursor]
+    return images[imageIndex]
+  }
+
   useEffect(() => {
     loadingRef.current = isLoadingImages
-    imageDataUrlRef.current = playlist
-    viewedPositionRef.current = viewedPosition
+    imagesRef.current = images
+    playlistCursorRef.current = playlistCursor
   })
 
   useEffect(() => {
@@ -100,7 +111,7 @@ function App() {
       {!isLoadingImages ? (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <img
-            src={playlist[viewedPosition]}
+            src={getCurrentImage()}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             onKeyDown={keyDownHandler}
           />
