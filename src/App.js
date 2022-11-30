@@ -4,7 +4,7 @@ import './App.css'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
-  const [playlist, setPlaylist] = useState()
+  const [playlist, setPlaylist] = useState() // Image indices
   const [viewedPosition, setViewedPosition] = useState(0)
 
   const loadingRef = useRef(isLoadingImages)
