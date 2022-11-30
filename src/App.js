@@ -5,8 +5,7 @@ import './App.css'
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
   const [playlist, setPlaylist] = useState()
-  const [played, setPlayed] = useState()
-  const [viewedPosition, setViewedPosition] = useState()
+  const [viewedPosition, setViewedPosition] = useState(0)
 
   const loadingRef = useRef(isLoadingImages)
   const imageDataUrlRef = useRef(playlist)
@@ -43,9 +42,6 @@ function App() {
     }
 
     setPlaylist(objectUrls)
-
-    const initialPosition = Math.round(Math.random() * objectUrls.length)
-    setViewedPosition(initialPosition)
 
     setIsLoadingImages(false)
   }
