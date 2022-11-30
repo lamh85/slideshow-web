@@ -110,8 +110,6 @@ function App() {
     setPlayed([...played, imagePlayed])
   }, [playlistCursor])
 
-  useEffect(() => {})
-
   return (
     <div
       className="App"
