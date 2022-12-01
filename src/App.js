@@ -147,34 +147,11 @@ function App() {
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             onKeyDown={keyDownHandler}
           />
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 100,
-              background: 'white',
-              padding: '1em',
-              fontWeight: 'bold',
-              display: 'flex',
-              width: '100%',
-            }}
-          >
-            <button onClick={handleShuffleClick}>SHUFFLE</button>
-            {thumbnails.map((url) => {
-              const isCurrent = url == getCurrentImage()
-
-              return (
-                <img
-                  src={url}
-                  style={{
-                    width: '100px',
-                    height: '50px',
-                    border: isCurrent ? '3px solid yellow' : 'none',
-                  }}
-                  key={url}
-                />
-              )
-            })}
-          </div>
+          <Toolbar
+            handleShuffleClick={handleShuffleClick}
+            thumbnails={thumbnails}
+            currentImage={getCurrentImage()}
+          />
         </div>
       ) : (
         <button onClick={uploadClickHandler}>CLICK ME</button>
@@ -184,3 +161,55 @@ function App() {
 }
 
 export default App
+
+const Toolbar = ({ handleShuffleClick, thumbnails, currentImage }) => {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        bottom: 100,
+        background: 'white',
+        padding: '1em',
+        fontWeight: 'bold',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        left: '50%',
+        transform: 'translateX(-50%)',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}
+      >
+        {thumbnails.map((url) => {
+          const isCurrent = url == currentImage
+
+          return (
+            <img
+              src={url}
+              style={{
+                width: '100px',
+                height: '50px',
+                border: isCurrent ? '3px solid yellow' : 'none',
+              }}
+              key={url}
+            />
+          )
+        })}
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}
+      >
+        <button onClick={handleShuffleClick}>SHUFFLE</button>
+      </div>
+    </div>
+  )
+}
