@@ -9,6 +9,8 @@ function App() {
   const [played, setPlayed] = useState([]) // Image indices
   const [playlistCursor, setPlaylistCursor] = useState(0)
   const [preview, setPreview] = useState([])
+  // Because playlist doesn't work as dependency for useEffect
+  const [shuffleCount, setShuffleCount] = useState(0)
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -29,6 +31,8 @@ function App() {
   }
 
   const handleShuffleClick = (_event) => {
+    console.log('shuffling')
+    setShuffleCount(shuffleCount + 1)
     setPlaylist(randomizeArray(playlist))
   }
 
@@ -94,7 +98,6 @@ function App() {
   }
 
   const updatePreview = () => {
-    console.log('updating preview')
     const sliceStart = playlistCursor + 1
     const imageIndices = playlist.slice(sliceStart, sliceStart + 10)
     const imageUrls = imageIndices.map((query) => images[query])
@@ -121,7 +124,7 @@ function App() {
     updatePreview()
   }, [playlistCursor])
 
-  useEffect(updatePreview, [JSON.stringify(images), JSON.stringify(playlist)])
+  useEffect(updatePreview, [JSON.stringify(images), shuffleCount])
 
   return (
     <div
