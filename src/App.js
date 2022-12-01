@@ -4,11 +4,11 @@ import './App.css'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]) // List of blob URLs
   const [playlist, setPlaylist] = useState([]) // Image indices
   const [played, setPlayed] = useState([]) // Image indices
   const [playlistCursor, setPlaylistCursor] = useState(0)
-  const [preview, setPreview] = useState([])
+  const [thumbnails, setThumbnails] = useState([])
   // Because playlist doesn't work as dependency for useEffect
   const [shuffleCount, setShuffleCount] = useState(0)
 
@@ -97,11 +97,19 @@ function App() {
     return images[imageIndex]
   }
 
-  const updatePreview = () => {
-    const sliceStart = playlistCursor + 1
-    const imageIndices = playlist.slice(sliceStart, sliceStart + 10)
+  const updateThumbnails = () => {
+    const thumbCountBefore = 2
+    const thumbCountAfter = 2
+
+    const sliceStart = Math.max(0, playlistCursor - thumbCountBefore)
+    const sliceAfter = Math.min(
+      playlist.length,
+      playlistCursor + thumbCountAfter + 1
+    )
+    const imageIndices = playlist.slice(sliceStart, sliceAfter)
     const imageUrls = imageIndices.map((query) => images[query])
-    setPreview(imageUrls)
+
+    setThumbnails(imageUrls)
   }
 
   useEffect(() => {
@@ -121,10 +129,10 @@ function App() {
     const imagePlayed = playlist[playlistCursor]
     setPlayed([...played, imagePlayed])
 
-    updatePreview()
+    updateThumbnails()
   }, [playlistCursor])
 
-  useEffect(updatePreview, [JSON.stringify(images), shuffleCount])
+  useEffect(updateThumbnails, [JSON.stringify(images), shuffleCount])
 
   return (
     <div
@@ -151,13 +159,21 @@ function App() {
             }}
           >
             <button onClick={handleShuffleClick}>SHUFFLE</button>
-            {preview.map((url) => (
-              <img
-                src={url}
-                style={{ width: '200px', height: '100px' }}
-                key={url}
-              />
-            ))}
+            {thumbnails.map((url) => {
+              const isCurrent = url == getCurrentImage()
+
+              return (
+                <img
+                  src={url}
+                  style={{
+                    width: '100px',
+                    height: '50px',
+                    border: isCurrent ? '3px solid yellow' : 'none',
+                  }}
+                  key={url}
+                />
+              )
+            })}
           </div>
         </div>
       ) : (
