@@ -11,6 +11,7 @@ function App() {
   const [thumbnails, setThumbnails] = useState([])
   // Because playlist doesn't work as dependency for useEffect
   const [shuffleCount, setShuffleCount] = useState(0)
+  const [objectFit, setObjectFit] = useState('cover')
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -34,6 +35,11 @@ function App() {
     console.log('shuffling')
     setShuffleCount(shuffleCount + 1)
     setPlaylist(randomizeArray(playlist))
+  }
+
+  const handleToggleObjectFit = () => {
+    const nextState = objectFit == 'contain' ? 'cover' : 'contain'
+    setObjectFit(nextState)
   }
 
   const uploadClickHandler = async () => {
@@ -144,13 +150,14 @@ function App() {
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <img
             src={getCurrentImage()}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit }}
             onKeyDown={keyDownHandler}
           />
           <Toolbar
             handleShuffleClick={handleShuffleClick}
             thumbnails={thumbnails}
             currentImage={getCurrentImage()}
+            handleToggleObjectFit={handleToggleObjectFit}
           />
         </div>
       ) : (
@@ -162,9 +169,22 @@ function App() {
 
 export default App
 
-const Toolbar = ({ handleShuffleClick, thumbnails, currentImage }) => {
+const Toolbar = ({
+  handleShuffleClick,
+  thumbnails,
+  currentImage,
+  handleToggleObjectFit,
+}) => {
+  const [shouldVisible, setShouldVisible] = useState(true)
+
+  const handleMouseEnter = () => setShouldVisible(true)
+
+  const handleMouseLeave = () => setShouldVisible(false)
+
   return (
     <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         position: 'absolute',
         bottom: 100,
@@ -176,6 +196,7 @@ const Toolbar = ({ handleShuffleClick, thumbnails, currentImage }) => {
         alignItems: 'center',
         left: '50%',
         transform: 'translateX(-50%)',
+        opacity: shouldVisible ? 1 : 0.1,
       }}
     >
       <div
@@ -206,9 +227,15 @@ const Toolbar = ({ handleShuffleClick, thumbnails, currentImage }) => {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'center',
+          fontSize: '2em',
         }}
       >
-        <button onClick={handleShuffleClick}>SHUFFLE</button>
+        <button onClick={handleShuffleClick} style={{ fontSize: '1em' }}>
+          🔀
+        </button>
+        <button onClick={handleToggleObjectFit} style={{ fontSize: '1em' }}>
+          ▣
+        </button>
       </div>
     </div>
   )
