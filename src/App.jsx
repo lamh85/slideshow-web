@@ -176,8 +176,6 @@ function App() {
   )
 }
 
-export default App
-
 const MONTHS_BY_INDEX = [
   null,
   'January',
@@ -286,3 +284,5 @@ const Toolbar = ({
     </div>
   )
 }
+
+export default App
