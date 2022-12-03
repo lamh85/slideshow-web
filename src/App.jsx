@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import { Toolbar } from './Toolbar'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
@@ -172,115 +173,6 @@ function App() {
       ) : (
         <button onClick={uploadClickHandler}>CLICK ME</button>
       )}
-    </div>
-  )
-}
-
-const MONTHS_BY_INDEX = [
-  null,
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
-
-const Toolbar = ({
-  handleShuffleClick,
-  thumbnails,
-  currentImage,
-  handleToggleObjectFit,
-}) => {
-  const [shouldVisible, setShouldVisible] = useState(true)
-
-  const handleMouseEnter = () => setShouldVisible(true)
-
-  const handleMouseLeave = () => setShouldVisible(false)
-
-  const getDate = (fileName) => {
-    // EG: IMG_20191114_145429
-    if (fileName.slice(0, 3) == 'IMG') {
-      const dateRaw = fileName.slice(4, 12)
-      const year = dateRaw.slice(0, 4)
-      const month = dateRaw.slice(4, 6)
-      const day = dateRaw.slice(6, 9)
-
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    } else {
-      // EG: 2017-04-14 12.05.33
-      const dateRaw = fileName.slice(0, 10)
-      const dateParts = dateRaw.split('-')
-      const year = dateParts[0]
-      const month = dateParts[1]
-      const day = dateParts[2]
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    }
-  }
-
-  return (
-    <div
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        position: 'absolute',
-        bottom: 100,
-        background: 'white',
-        padding: '1em',
-        fontWeight: 'bold',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        opacity: shouldVisible ? 1 : 0.1,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}
-      >
-        {thumbnails.map((url) => {
-          const isCurrent = url == currentImage.blob
-
-          return (
-            <img
-              src={url}
-              style={{
-                width: '100px',
-                height: '50px',
-                border: isCurrent ? '3px solid yellow' : 'none',
-              }}
-              key={url}
-            />
-          )
-        })}
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          fontSize: '2em',
-        }}
-      >
-        <div>{getDate(currentImage.name)}</div>
-        <button onClick={handleShuffleClick} style={{ fontSize: '1em' }}>
-          🔀
-        </button>
-        <button onClick={handleToggleObjectFit} style={{ fontSize: '1em' }}>
-          ▣
-        </button>
-      </div>
     </div>
   )
 }
