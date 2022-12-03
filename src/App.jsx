@@ -13,6 +13,7 @@ function App() {
   // Because playlist doesn't work as dependency for useEffect
   const [shuffleCount, setShuffleCount] = useState(0)
   const [objectFit, setObjectFit] = useState('cover')
+  const [dateSorting, setDateSorting] = useState()
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -43,6 +44,31 @@ function App() {
     setObjectFit(nextState)
   }
 
+  const handleSortDate = () => {
+    const nextState = dateSorting == 'asc' ? 'desc' : 'asc'
+    setDateSorting(nextState)
+  }
+
+  const getTimeStamp = (fileName) => {
+    // EG: IMG_20191114_145429
+    if (fileName.slice(0, 3) == 'IMG') {
+      const dateRaw = fileName.slice(4, 12)
+      const year = dateRaw.slice(0, 4)
+      const month = dateRaw.slice(4, 6)
+      const day = dateRaw.slice(6, 9)
+
+      return `${year}-${month}-${day}`
+    } else {
+      // EG: 2017-04-14 12.05.33
+      const dateRaw = fileName.slice(0, 10)
+      const dateParts = dateRaw.split('-')
+      const year = dateParts[0]
+      const month = dateParts[1]
+      const day = dateParts[2]
+      return `${year}-${month}-${day}`
+    }
+  }
+
   const uploadClickHandler = async () => {
     const dirHandle = await window.showDirectoryPicker()
 
@@ -50,6 +76,11 @@ function App() {
 
     for await (const entry of dirHandle.values()) {
       const { name } = entry
+
+      if (!name.includes('.jpg')) {
+        continue
+      }
+
       const fileHandle = await dirHandle.getFileHandle(name)
       const fileData = await fileHandle.getFile()
       const objectUrl = URL.createObjectURL(fileData)
@@ -57,6 +88,7 @@ function App() {
       const image = {
         blob: objectUrl,
         name,
+        timeStamp: getTimeStamp(name),
       }
 
       images.push(image)
@@ -150,6 +182,24 @@ function App() {
 
   useEffect(updateThumbnails, [JSON.stringify(images), shuffleCount])
 
+  useEffect(() => {
+    const toSort = [...images]
+    const sorted = toSort.sort((a, b) => {
+      if (a.timeStamp > b.timeStamp) {
+        return dateSorting == 'asc' ? 1 : -1
+      } else {
+        return dateSorting == 'asc' ? -1 : 1
+      }
+    })
+
+    setImages(sorted)
+
+    const newPlaylist = Array(sorted.length)
+      .fill('')
+      .map((_item, index) => index)
+    setPlaylist(newPlaylist)
+  }, [dateSorting])
+
   return (
     <div
       className="App"
@@ -168,6 +218,8 @@ function App() {
             thumbnails={thumbnails}
             currentImage={getCurrentImage()}
             handleToggleObjectFit={handleToggleObjectFit}
+            dateSorting={dateSorting}
+            handleSortDate={handleSortDate}
           />
         </div>
       ) : (

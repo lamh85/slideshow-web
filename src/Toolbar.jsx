@@ -21,6 +21,8 @@ export const Toolbar = ({
   thumbnails,
   currentImage,
   handleToggleObjectFit,
+  dateSorting,
+  handleSortDate,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
@@ -104,6 +106,10 @@ export const Toolbar = ({
         <button onClick={handleToggleObjectFit} style={{ fontSize: '1em' }}>
           ▣
         </button>
+        <button onClick={handleSortDate} style={{ fontSize: '1em' }}>
+          📅
+        </button>
+        <div>{dateSorting}</div>
       </div>
     </div>
   )
