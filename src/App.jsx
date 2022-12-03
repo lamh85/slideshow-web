@@ -45,7 +45,7 @@ function App() {
   const uploadClickHandler = async () => {
     const dirHandle = await window.showDirectoryPicker()
 
-    const objectUrls = []
+    const images = []
 
     for await (const entry of dirHandle.values()) {
       const { name } = entry
@@ -53,14 +53,19 @@ function App() {
       const fileData = await fileHandle.getFile()
       const objectUrl = URL.createObjectURL(fileData)
 
-      objectUrls.push(objectUrl)
+      const image = {
+        blob: objectUrl,
+        name,
+      }
+
+      images.push(image)
     }
 
-    setImages(objectUrls)
+    setImages(images)
     setIsLoadingImages(false)
     setPlayed([0])
 
-    const indices = Array(objectUrls.length)
+    const indices = Array(images.length)
       .fill('')
       .map((_item, index) => index)
     setPlaylist(indices)
@@ -113,7 +118,7 @@ function App() {
       playlistCursor + thumbCountAfter + 1
     )
     const imageIndices = playlist.slice(sliceStart, sliceAfter)
-    const imageUrls = imageIndices.map((query) => images[query])
+    const imageUrls = imageIndices.map((query) => images[query].blob)
 
     setThumbnails(imageUrls)
   }
@@ -129,6 +134,10 @@ function App() {
   useEffect(() => {
     const htmlElem = document.querySelector('html')
     htmlElem.addEventListener('keydown', keyDownHandler)
+
+    return () => {
+      htmlElem.removeEventListener('keydown', keyDownHandler)
+    }
   }, [])
 
   useEffect(() => {
@@ -149,7 +158,7 @@ function App() {
       {!isLoadingImages ? (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <img
-            src={getCurrentImage()}
+            src={getCurrentImage().blob}
             style={{ width: '100%', height: '100%', objectFit }}
             onKeyDown={keyDownHandler}
           />
@@ -169,6 +178,22 @@ function App() {
 
 export default App
 
+const MONTHS_BY_INDEX = [
+  null,
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
 const Toolbar = ({
   handleShuffleClick,
   thumbnails,
@@ -180,6 +205,26 @@ const Toolbar = ({
   const handleMouseEnter = () => setShouldVisible(true)
 
   const handleMouseLeave = () => setShouldVisible(false)
+
+  const getDate = (fileName) => {
+    // EG: IMG_20191114_145429
+    if (fileName.slice(0, 3) == 'IMG') {
+      const dateRaw = fileName.slice(4, 12)
+      const year = dateRaw.slice(0, 4)
+      const month = dateRaw.slice(4, 6)
+      const day = dateRaw.slice(6, 9)
+
+      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
+    } else {
+      // EG: 2017-04-14 12.05.33
+      const dateRaw = fileName.slice(0, 10)
+      const dateParts = dateRaw.split('-')
+      const year = dateParts[0]
+      const month = dateParts[1]
+      const day = dateParts[2]
+      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
+    }
+  }
 
   return (
     <div
@@ -207,7 +252,7 @@ const Toolbar = ({
         }}
       >
         {thumbnails.map((url) => {
-          const isCurrent = url == currentImage
+          const isCurrent = url == currentImage.blob
 
           return (
             <img
@@ -230,6 +275,7 @@ const Toolbar = ({
           fontSize: '2em',
         }}
       >
+        <div>{getDate(currentImage.name)}</div>
         <button onClick={handleShuffleClick} style={{ fontSize: '1em' }}>
           🔀
         </button>
