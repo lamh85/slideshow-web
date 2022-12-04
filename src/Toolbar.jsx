@@ -23,6 +23,8 @@ export const Toolbar = ({
   handleToggleObjectFit,
   dateSorting,
   handleSortDate,
+  navigateToHome,
+  navigateToEnd,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
@@ -100,17 +102,21 @@ export const Toolbar = ({
         }}
       >
         <div>{getDate(currentImage.name)}</div>
-        <button onClick={handleShuffleClick} style={{ fontSize: '1em' }}>
-          🔀
-        </button>
-        <button onClick={handleToggleObjectFit} style={{ fontSize: '1em' }}>
-          ▣
-        </button>
-        <button onClick={handleSortDate} style={{ fontSize: '1em' }}>
-          📅
-        </button>
+        <Button onClick={navigateToHome}>⏮</Button>
+        <Button onClick={handleShuffleClick}>🔀</Button>
+        <Button onClick={handleToggleObjectFit}>▣</Button>
+        <Button onClick={handleSortDate}>📅</Button>
+        <Button onClick={navigateToEnd}>⏭</Button>
         <div>{dateSorting}</div>
       </div>
     </div>
+  )
+}
+
+const Button = (props) => {
+  return (
+    <button {...props} style={{ fontSize: '1em' }}>
+      {props.children}
+    </button>
   )
 }

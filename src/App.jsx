@@ -47,6 +47,7 @@ function App() {
   const handleSortDate = () => {
     const nextState = dateSorting == 'asc' ? 'desc' : 'asc'
     setDateSorting(nextState)
+    setPlaylistCursor(0)
   }
 
   const getTimeStamp = (fileName) => {
@@ -220,6 +221,8 @@ function App() {
             handleToggleObjectFit={handleToggleObjectFit}
             dateSorting={dateSorting}
             handleSortDate={handleSortDate}
+            navigateToHome={() => setPlaylistCursor(0)}
+            navigateToEnd={() => setPlaylistCursor(playlist.length - 1)}
           />
         </div>
       ) : (
