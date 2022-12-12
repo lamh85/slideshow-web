@@ -2,18 +2,20 @@ import { useState, useEffect, useRef } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { Toolbar } from './Toolbar'
+import EXIF from 'exif-js'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
   const [images, setImages] = useState([]) // List of blob URLs
   const [playlist, setPlaylist] = useState([]) // Image indices
   const [played, setPlayed] = useState([]) // Image indices
-  const [playlistCursor, setPlaylistCursor] = useState(0)
+  const [playlistCursor, setPlaylistCursor] = useState()
   const [thumbnails, setThumbnails] = useState([])
   // Because playlist doesn't work as dependency for useEffect
   const [shuffleCount, setShuffleCount] = useState(0)
   const [objectFit, setObjectFit] = useState('cover')
   const [dateSorting, setDateSorting] = useState()
+  const [exifExtracted, setExifExtracted] = useState({})
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -70,6 +72,11 @@ function App() {
     }
   }
 
+  const getExifData = async (file) => {
+    const arrayBuffer = await file.arrayBuffer()
+    return EXIF.readFromBinaryFile(arrayBuffer)
+  }
+
   const uploadClickHandler = async () => {
     const dirHandle = await window.showDirectoryPicker()
 
@@ -84,12 +91,13 @@ function App() {
 
       const fileHandle = await dirHandle.getFileHandle(name)
       const fileData = await fileHandle.getFile()
-      const objectUrl = URL.createObjectURL(fileData)
+      const blob = URL.createObjectURL(fileData)
 
       const image = {
-        blob: objectUrl,
+        blob,
         name,
         timeStamp: getTimeStamp(name),
+        fileData,
       }
 
       images.push(image)
@@ -98,6 +106,7 @@ function App() {
     setImages(images)
     setIsLoadingImages(false)
     setPlayed([0])
+    setPlaylistCursor(0)
 
     const indices = Array(images.length)
       .fill('')
@@ -157,6 +166,25 @@ function App() {
     setThumbnails(imageUrls)
   }
 
+  const getGpsCoordinates = () => {
+    if (Object.keys(exifExtracted).length == 0) {
+      return ''
+    }
+
+    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
+      exifExtracted
+
+    if (
+      [GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef].includes(
+        undefined
+      )
+    ) {
+      return ''
+    }
+
+    return `${GPSLatitude[0]}°${GPSLatitude[1]}'${GPSLatitude[2]}"${GPSLatitudeRef} ${GPSLongitude[0]}°${GPSLongitude[1]}'${GPSLongitude[2]}"${GPSLongitudeRef}`
+  }
+
   useEffect(() => {
     loadingRef.current = isLoadingImages
     imagesRef.current = images
@@ -179,6 +207,21 @@ function App() {
     setPlayed([...played, imagePlayed])
 
     updateThumbnails()
+
+    const updateExif = async () => {
+      setExifExtracted({})
+      const imageObj = images[playlistCursor]
+      const fileData = imageObj?.fileData
+
+      if (!fileData) {
+        return
+      }
+
+      const exif = await getExifData(fileData)
+      setExifExtracted(exif)
+    }
+
+    updateExif()
   }, [playlistCursor])
 
   useEffect(updateThumbnails, [JSON.stringify(images), shuffleCount])
@@ -202,11 +245,7 @@ function App() {
   }, [dateSorting])
 
   return (
-    <div
-      className="App"
-      style={{ width: '100%', height: '100%' }}
-      // onKeyDown={keyDownHandler}
-    >
+    <div className="App" style={{ width: '100%', height: '100%' }}>
       {!isLoadingImages ? (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <img
@@ -214,6 +253,16 @@ function App() {
             style={{ width: '100%', height: '100%', objectFit }}
             onKeyDown={keyDownHandler}
           />
+          <div
+            style={{
+              background: 'white',
+              left: 0,
+              bottom: 0,
+              position: 'absolute',
+            }}
+          >
+            {getGpsCoordinates()}
+          </div>
           <Toolbar
             handleShuffleClick={handleShuffleClick}
             thumbnails={thumbnails}
