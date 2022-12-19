@@ -25,6 +25,8 @@ export const Toolbar = ({
   handleSortDate,
   navigateToHome,
   navigateToEnd,
+  city,
+  country,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
@@ -108,6 +110,11 @@ export const Toolbar = ({
         <Button onClick={handleSortDate}>📅</Button>
         <Button onClick={navigateToEnd}>⏭</Button>
         <div>{dateSorting}</div>
+      </div>
+      <div>
+        {city.length > 0 && country.length > 0
+          ? `${city}, ${country}`
+          : 'No location data found.'}
       </div>
     </div>
   )

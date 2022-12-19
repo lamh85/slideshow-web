@@ -16,6 +16,8 @@ function App() {
   const [objectFit, setObjectFit] = useState('cover')
   const [dateSorting, setDateSorting] = useState()
   const [exifExtracted, setExifExtracted] = useState({})
+  const [city, setCity] = useState('')
+  const [country, setCountry] = useState('')
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -166,23 +168,77 @@ function App() {
     setThumbnails(imageUrls)
   }
 
-  const getGpsCoordinates = () => {
-    if (Object.keys(exifExtracted).length == 0) {
-      return ''
+  const getGpsFromExif = (exifOverride) => {
+    const exifToAnalyze = exifOverride || exifExtracted
+
+    if (Object.keys(exifToAnalyze).length == 0) {
+      return { isValid: false }
     }
 
     const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      exifExtracted
+      exifToAnalyze
 
     if (
       [GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef].includes(
         undefined
       )
     ) {
+      return { isValid: false }
+    }
+
+    return {
+      GPSLatitude,
+      GPSLatitudeRef,
+      GPSLongitude,
+      GPSLongitudeRef,
+      isValid: true,
+    }
+  }
+
+  const getGpsString = () => {
+    const extractedGps = getGpsFromExif()
+
+    if (!extractedGps.isValid) {
       return ''
     }
 
+    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
+      exifExtracted
+
     return `${GPSLatitude[0]}°${GPSLatitude[1]}'${GPSLatitude[2]}"${GPSLatitudeRef} ${GPSLongitude[0]}°${GPSLongitude[1]}'${GPSLongitude[2]}"${GPSLongitudeRef}`
+  }
+
+  const updateGeoOnChange = async () => {
+    setExifExtracted({})
+    const imageIndex = playlist[playlistCursor]
+    const imageObj = images[imageIndex]
+    const fileData = imageObj?.fileData
+
+    if (!fileData) {
+      return
+    }
+
+    const exif = await getExifData(fileData)
+    setExifExtracted(exif)
+
+    const extractedGps = getGpsFromExif(exif)
+    if (!extractedGps.isValid) {
+      console.log('No GPS data found in Exif.')
+      setCity('')
+      setCountry('')
+      return
+    }
+
+    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
+      extractedGps
+
+    const res = await fetch(`
+      http://localhost:3001/geo_names?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
+    `)
+
+    const responseJson = await res.json()
+    setCity(responseJson.city)
+    setCountry(responseJson.country)
   }
 
   useEffect(() => {
@@ -207,21 +263,7 @@ function App() {
     setPlayed([...played, imagePlayed])
 
     updateThumbnails()
-
-    const updateExif = async () => {
-      setExifExtracted({})
-      const imageObj = images[playlistCursor]
-      const fileData = imageObj?.fileData
-
-      if (!fileData) {
-        return
-      }
-
-      const exif = await getExifData(fileData)
-      setExifExtracted(exif)
-    }
-
-    updateExif()
+    updateGeoOnChange()
   }, [playlistCursor])
 
   useEffect(updateThumbnails, [JSON.stringify(images), shuffleCount])
@@ -261,7 +303,7 @@ function App() {
               position: 'absolute',
             }}
           >
-            {getGpsCoordinates()}
+            {getGpsString()}
           </div>
           <Toolbar
             handleShuffleClick={handleShuffleClick}
@@ -272,6 +314,8 @@ function App() {
             handleSortDate={handleSortDate}
             navigateToHome={() => setPlaylistCursor(0)}
             navigateToEnd={() => setPlaylistCursor(playlist.length - 1)}
+            city={city}
+            country={country}
           />
         </div>
       ) : (
