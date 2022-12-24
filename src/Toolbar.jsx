@@ -27,6 +27,7 @@ export const Toolbar = ({
   navigateToEnd,
   city,
   country,
+  countryFlag,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
@@ -112,9 +113,23 @@ export const Toolbar = ({
         <div>{dateSorting}</div>
       </div>
       <div>
-        {city.length > 0 && country.length > 0
-          ? `${city}, ${country}`
-          : 'No location data found.'}
+        {city.length > 0 && country.length > 0 ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              src={countryFlag}
+              height="25px"
+              style={{ marginRight: '5px' }}
+            />
+            <div>{city}</div>
+          </div>
+        ) : (
+          'No location data found.'
+        )}
       </div>
     </div>
   )
