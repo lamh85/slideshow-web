@@ -102,9 +102,14 @@ export const Toolbar = ({
           flexDirection: 'row',
           justifyContent: 'center',
           fontSize: '2em',
+          alignItems: 'center',
         }}
       >
-        <div>{getDate(currentImage.name)}</div>
+        <div
+          style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
+        >
+          {getDate(currentImage.name)}
+        </div>
         <Button onClick={navigateToHome}>⏮</Button>
         <Button onClick={handleShuffleClick}>🔀</Button>
         <Button onClick={handleToggleObjectFit}>▣</Button>

@@ -42,6 +42,7 @@ function App() {
     console.log('shuffling')
     setShuffleCount(shuffleCount + 1)
     setPlaylist(randomizeArray(playlist))
+    setDateSorting('random')
   }
 
   const handleToggleObjectFit = () => {
