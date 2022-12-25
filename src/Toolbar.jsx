@@ -123,7 +123,11 @@ export const Toolbar = ({
             <img
               src={countryFlag}
               height="25px"
-              style={{ marginRight: '5px' }}
+              style={{
+                marginRight: '5px',
+                border: '1px solid lightgrey',
+                borderRadius: '3px',
+              }}
             />
             <div>{city}</div>
           </div>
