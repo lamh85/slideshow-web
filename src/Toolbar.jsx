@@ -28,6 +28,7 @@ export const Toolbar = ({
   city,
   country,
   countryFlag,
+  objectFit,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
@@ -108,37 +109,40 @@ export const Toolbar = ({
         <div
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
-          {getDate(currentImage.name)}
-        </div>
-        <Button onClick={navigateToHome}>⏮</Button>
-        <Button onClick={handleShuffleClick}>🔀</Button>
-        <Button onClick={handleToggleObjectFit}>▣</Button>
-        <Button onClick={handleSortDate}>📅</Button>
-        <Button onClick={navigateToEnd}>⏭</Button>
-        <div>{dateSorting}</div>
-      </div>
-      <div>
-        {city.length > 0 && country.length > 0 ? (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <img
-              src={countryFlag}
-              height="25px"
-              style={{
-                marginRight: '5px',
-                border: '1px solid lightgrey',
-                borderRadius: '3px',
-              }}
-            />
-            <div>{city}</div>
+          <div>{getDate(currentImage.name)}</div>
+          <div>
+            {city.length > 0 && country.length > 0 ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <img
+                  src={countryFlag}
+                  height="25px"
+                  style={{
+                    marginRight: '5px',
+                    border: '1px solid lightgrey',
+                    borderRadius: '3px',
+                  }}
+                />
+                <div>{city}</div>
+              </div>
+            ) : (
+              'No location data found.'
+            )}
           </div>
-        ) : (
-          'No location data found.'
-        )}
+        </div>
+        <ButtonsRow
+          navigateToHome={navigateToHome}
+          handleShuffleClick={handleShuffleClick}
+          handleToggleObjectFit={handleToggleObjectFit}
+          objectFit={objectFit}
+          handleSortDate={handleSortDate}
+          dateSorting={dateSorting}
+          navigateToEnd={navigateToEnd}
+        />
       </div>
     </div>
   )
@@ -146,8 +150,56 @@ export const Toolbar = ({
 
 const Button = (props) => {
   return (
-    <button {...props} style={{ fontSize: '1em' }}>
+    <button
+      {...props}
+      style={{
+        fontSize: '20px',
+        height: '40px',
+        padding: '5px',
+        width: '55px',
+      }}
+    >
       {props.children}
     </button>
+  )
+}
+
+const ButtonsRow = ({
+  navigateToHome,
+  handleShuffleClick,
+  handleToggleObjectFit,
+  objectFit,
+  handleSortDate,
+  dateSorting,
+  navigateToEnd
+}) => {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+      <Button onClick={navigateToHome}>⏮</Button>
+      <Button onClick={handleShuffleClick}>🔀</Button>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Button style={{ fontSize: '30px' }} onClick={handleToggleObjectFit}>
+          ▣
+        </Button>
+        <div style={{ fontSize: '15px' }}>{objectFit}</div>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Button onClick={handleSortDate}>📅</Button>
+        <div style={{ fontSize: '15px' }}>{dateSorting}</div>
+      </div>
+      <Button onClick={navigateToEnd}>⏭</Button>
+    </div>
   )
 }

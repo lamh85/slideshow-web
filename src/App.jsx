@@ -329,6 +329,7 @@ function App() {
             city={city}
             country={country}
             countryFlag={countryFlag}
+            objectFit={objectFit}
           />
         </div>
       ) : (
