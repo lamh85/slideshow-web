@@ -93,6 +93,7 @@ export const Toolbar = ({
                 border: isCurrent ? '3px solid yellow' : 'none',
               }}
               key={url}
+              alt="Thumbnail"
             />
           )
         })}
@@ -110,29 +111,7 @@ export const Toolbar = ({
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
           <div>{getDate(currentImage.name)}</div>
-          <div>
-            {city.length > 0 && country.length > 0 ? (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <img
-                  src={countryFlag}
-                  height="25px"
-                  style={{
-                    marginRight: '5px',
-                    border: '1px solid lightgrey',
-                    borderRadius: '3px',
-                  }}
-                />
-                <div>{city}</div>
-              </div>
-            ) : (
-              'No location data found.'
-            )}
-          </div>
+          <Location city={city} country={country} countryFlag={countryFlag} />
         </div>
         <ButtonsRow
           navigateToHome={navigateToHome}
@@ -144,6 +123,33 @@ export const Toolbar = ({
           navigateToEnd={navigateToEnd}
         />
       </div>
+    </div>
+  )
+}
+
+const Location = ({ city, country, countryFlag }) => {
+  if (city.length === 0 || country.length === 0) {
+    return <div>No location data found.</div>
+  }
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <img
+        src={countryFlag}
+        height="25px"
+        style={{
+          marginRight: '5px',
+          border: '1px solid lightgrey',
+          borderRadius: '3px',
+        }}
+        alt={`Flag of ${country}`}
+      />
+      <div>{city}</div>
     </div>
   )
 }
@@ -171,7 +177,7 @@ const ButtonsRow = ({
   objectFit,
   handleSortDate,
   dateSorting,
-  navigateToEnd
+  navigateToEnd,
 }) => {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
