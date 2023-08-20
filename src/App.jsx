@@ -18,7 +18,6 @@ function App() {
   const [exifExtracted, setExifExtracted] = useState({})
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
-  const [countryFlag, setCountryFlag] = useState('')
 
   const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
@@ -241,12 +240,6 @@ function App() {
     const responseJson = await res.json()
     setCity(responseJson.city)
     setCountry(responseJson.country)
-
-    const flagRes = await fetch(
-      `https://countryflagsapi.com/svg/${responseJson.country}`
-    )
-    const responseBlob = await flagRes.blob()
-    setCountryFlag(URL.createObjectURL(responseBlob))
   }
 
   useEffect(() => {
@@ -328,7 +321,6 @@ function App() {
             navigateToEnd={() => setPlaylistCursor(playlist.length - 1)}
             city={city}
             country={country}
-            countryFlag={countryFlag}
             objectFit={objectFit}
           />
         </div>

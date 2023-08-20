@@ -27,7 +27,6 @@ export const Toolbar = ({
   navigateToEnd,
   city,
   country,
-  countryFlag,
   objectFit,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
@@ -111,7 +110,7 @@ export const Toolbar = ({
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
           <div>{getDate(currentImage.name)}</div>
-          <Location city={city} country={country} countryFlag={countryFlag} />
+          <Location city={city} country={country} />
         </div>
         <ButtonsRow
           navigateToHome={navigateToHome}
@@ -127,7 +126,7 @@ export const Toolbar = ({
   )
 }
 
-const Location = ({ city, country, countryFlag }) => {
+const Location = ({ city, country }) => {
   if (city.length === 0 || country.length === 0) {
     return <div>No location data found.</div>
   }
@@ -140,9 +139,9 @@ const Location = ({ city, country, countryFlag }) => {
       }}
     >
       <img
-        src={countryFlag}
-        height="25px"
+        src={`https://flagcdn.com/${country.toLowerCase()}.svg`}
         style={{
+          height: '1em',
           marginRight: '5px',
           border: '1px solid lightgrey',
           borderRadius: '3px',
