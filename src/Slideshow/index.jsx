@@ -78,9 +78,9 @@ const Slideshow = ({
     const toSort = [...images]
     const sorted = toSort.sort((a, b) => {
       if (a.timeStamp > b.timeStamp) {
-        return dateSorting == 'asc' ? 1 : -1
+        return dateSorting === 'asc' ? 1 : -1
       } else {
-        return dateSorting == 'asc' ? -1 : 1
+        return dateSorting === 'asc' ? -1 : 1
       }
     })
 
@@ -134,7 +134,7 @@ const Slideshow = ({
   const getGpsFromExif = (exifOverride) => {
     const exifToAnalyze = exifOverride || exifExtracted
 
-    if (Object.keys(exifToAnalyze).length == 0) {
+    if (Object.keys(exifToAnalyze).length === 0) {
       return { isValid: false }
     }
 
@@ -174,9 +174,9 @@ const Slideshow = ({
   const navigatePlaylist = (increment) => {
     const maxPosition = imagesRef.current.length - 1
 
-    if (increment > 0 && playlistCursorRef.current == maxPosition) {
+    if (increment > 0 && playlistCursorRef.current === maxPosition) {
       setPlaylistCursor(0)
-    } else if (increment < 0 && playlistCursorRef.current == 0) {
+    } else if (increment < 0 && playlistCursorRef.current === 0) {
       setPlaylistCursor(maxPosition)
     } else {
       setPlaylistCursor(playlistCursorRef.current + increment)
@@ -221,12 +221,12 @@ const Slideshow = ({
   }
 
   const handleToggleObjectFit = () => {
-    const nextState = objectFit == 'contain' ? 'cover' : 'contain'
+    const nextState = objectFit === 'contain' ? 'cover' : 'contain'
     setObjectFit(nextState)
   }
 
   const handleSortDate = () => {
-    const nextState = dateSorting == 'asc' ? 'desc' : 'asc'
+    const nextState = dateSorting === 'asc' ? 'desc' : 'asc'
     setDateSorting(nextState)
     setPlaylistCursor(0)
   }

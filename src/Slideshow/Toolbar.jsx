@@ -37,7 +37,7 @@ export const Toolbar = ({
 
   const getDate = (fileName) => {
     // EG: IMG_20191114_145429
-    if (fileName.slice(0, 3) == 'IMG') {
+    if (fileName.slice(0, 3) === 'IMG') {
       const dateRaw = fileName.slice(4, 12)
       const year = dateRaw.slice(0, 4)
       const month = dateRaw.slice(4, 6)
@@ -81,7 +81,7 @@ export const Toolbar = ({
         }}
       >
         {thumbnails.map((url) => {
-          const isCurrent = url == currentImage.blob
+          const isCurrent = url === currentImage.blob
 
           return (
             <img
