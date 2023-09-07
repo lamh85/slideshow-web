@@ -22,11 +22,8 @@ const Slideshow = ({
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
 
-  const loadingRef = useRef(isLoadingImages)
   const imagesRef = useRef(images)
-  const playlistRef = useRef(playlist)
   const playlistCursorRef = useRef(playlistCursor)
-  const playedRef = useRef(played)
 
   const updateThumbnails = () => {
     const thumbCountBefore = 2
@@ -44,11 +41,8 @@ const Slideshow = ({
   }
 
   useEffect(() => {
-    loadingRef.current = isLoadingImages
     imagesRef.current = images
-    playlistRef.current = playlist
     playlistCursorRef.current = playlistCursor
-    playedRef.current = played
   })
 
   useEffect(() => {
@@ -184,10 +178,6 @@ const Slideshow = ({
   }
 
   const keyDownHandler = (event) => {
-    if (loadingRef.current) {
-      return
-    }
-
     const { code } = event
 
     let increment = 0
