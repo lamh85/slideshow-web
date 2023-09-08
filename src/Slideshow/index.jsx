@@ -22,7 +22,6 @@ const Slideshow = ({
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
 
-  const imagesRef = useRef(images)
   const playlistCursorRef = useRef(playlistCursor)
 
   const updateThumbnails = () => {
@@ -41,7 +40,6 @@ const Slideshow = ({
   }
 
   useEffect(() => {
-    imagesRef.current = images
     playlistCursorRef.current = playlistCursor
   })
 
@@ -166,7 +164,7 @@ const Slideshow = ({
   }
 
   const navigatePlaylist = (increment) => {
-    const maxPosition = imagesRef.current.length - 1
+    const maxPosition = images.length - 1
 
     if (increment > 0 && playlistCursorRef.current === maxPosition) {
       setPlaylistCursor(0)
