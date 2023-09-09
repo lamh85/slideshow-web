@@ -22,8 +22,6 @@ const Slideshow = ({
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
 
-  const playlistCursorRef = useRef(playlistCursor)
-
   const updateThumbnails = () => {
     const thumbCountBefore = 2
     const thumbCountAfter = 2
@@ -40,17 +38,17 @@ const Slideshow = ({
   }
 
   useEffect(() => {
-    playlistCursorRef.current = playlistCursor
-  })
-
-  useEffect(() => {
     const htmlElem = document.querySelector('html')
+    htmlElem.removeEventListener('keydown', keyDownHandler)
     htmlElem.addEventListener('keydown', keyDownHandler)
 
     return () => {
       htmlElem.removeEventListener('keydown', keyDownHandler)
     }
-  }, [])
+    // Must update the event handler to prevent stale states in the handler functions.
+    // Dependencies should include every state required to run the handler
+    // and its recursively called functions.
+  }, [playlistCursor, images])
 
   useEffect(() => {
     const imagePlayed = playlist[playlistCursor]
@@ -166,12 +164,12 @@ const Slideshow = ({
   const navigatePlaylist = (increment) => {
     const maxPosition = images.length - 1
 
-    if (increment > 0 && playlistCursorRef.current === maxPosition) {
+    if (increment > 0 && playlistCursor === maxPosition) {
       setPlaylistCursor(0)
-    } else if (increment < 0 && playlistCursorRef.current === 0) {
+    } else if (increment < 0 && playlistCursor === 0) {
       setPlaylistCursor(maxPosition)
     } else {
-      setPlaylistCursor(playlistCursorRef.current + increment)
+      setPlaylistCursor(playlistCursor + increment)
     }
   }
 
