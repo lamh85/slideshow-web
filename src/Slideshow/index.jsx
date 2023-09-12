@@ -13,16 +13,14 @@ const Slideshow = ({
   played,
   setPlayed,
 }) => {
-  // Because playlist doesn't work as dependency for useEffect
   const [shuffleCount, setShuffleCount] = useState(0)
   const [objectFit, setObjectFit] = useState('cover')
   const [dateSorting, setDateSorting] = useState()
-  const [thumbnails, setThumbnails] = useState([])
   const [exifExtracted, setExifExtracted] = useState({})
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
 
-  const updateThumbnails = () => {
+  const getThumbnails = () => {
     const thumbCountBefore = 2
     const thumbCountAfter = 2
 
@@ -32,9 +30,7 @@ const Slideshow = ({
       playlistCursor + thumbCountAfter + 1
     )
     const imageIndices = playlist.slice(sliceStart, sliceAfter)
-    const imageUrls = imageIndices.map((query) => images[query].blob)
-
-    setThumbnails(imageUrls)
+    return imageIndices.map((query) => images[query].blob)
   }
 
   useEffect(() => {
@@ -54,15 +50,12 @@ const Slideshow = ({
     const imagePlayed = playlist[playlistCursor]
     setPlayed([...played, imagePlayed])
 
-    updateThumbnails()
     updateGeoOnChange()
-  }, [playlistCursor])
-
-  useEffect(updateThumbnails, [JSON.stringify(images), shuffleCount])
+  }, [playlistCursor, images])
 
   useEffect(() => {
     updateGeoOnChange()
-  }, [shuffleCount])
+  }, [shuffleCount, images])
 
   useEffect(() => {
     const toSort = [...images]
@@ -244,7 +237,7 @@ const Slideshow = ({
       </div>
       <Toolbar
         handleShuffleClick={handleShuffleClick}
-        thumbnails={thumbnails}
+        thumbnails={getThumbnails()}
         currentImage={getCurrentImage()}
         handleToggleObjectFit={handleToggleObjectFit}
         dateSorting={dateSorting}
