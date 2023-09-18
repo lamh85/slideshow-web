@@ -1,21 +1,5 @@
 import { useState } from 'react'
 
-const MONTHS_BY_INDEX = [
-  null,
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-]
-
 export const Toolbar = ({
   handleShuffleClick,
   thumbnails,
@@ -28,32 +12,13 @@ export const Toolbar = ({
   city,
   country,
   objectFit,
+  date,
 }) => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
   const handleMouseEnter = () => setShouldVisible(true)
 
   const handleMouseLeave = () => setShouldVisible(false)
-
-  const getDate = (fileName) => {
-    // EG: IMG_20191114_145429
-    if (fileName.slice(0, 3) === 'IMG') {
-      const dateRaw = fileName.slice(4, 12)
-      const year = dateRaw.slice(0, 4)
-      const month = dateRaw.slice(4, 6)
-      const day = dateRaw.slice(6, 9)
-
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    } else {
-      // EG: 2017-04-14 12.05.33
-      const dateRaw = fileName.slice(0, 10)
-      const dateParts = dateRaw.split('-')
-      const year = dateParts[0]
-      const month = dateParts[1]
-      const day = dateParts[2]
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    }
-  }
 
   return (
     <div
@@ -109,7 +74,7 @@ export const Toolbar = ({
         <div
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
-          <div>{getDate(currentImage.name)}</div>
+          <div>{date}</div>
           <Location city={city} country={country} />
         </div>
         <ButtonsRow
