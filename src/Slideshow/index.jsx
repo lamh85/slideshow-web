@@ -61,6 +61,7 @@ const Slideshow = ({ isLoadingImages, images }) => {
         city={city}
         country={country}
         objectFit={objectFit}
+        date={date}
       />
     </div>
   )
