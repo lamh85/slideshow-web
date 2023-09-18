@@ -109,7 +109,7 @@ export const Toolbar = ({
         <div
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
-          <div>{getDate(currentImage.name)}</div>
+          <div>{currentImage?.name ? getDate(currentImage.name) : ''}</div>
           <Location city={city} country={country} />
         </div>
         <ButtonsRow
