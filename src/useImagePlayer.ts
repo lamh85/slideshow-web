@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import EXIF from 'exif-js'
+import useExif from './useExif.ts'
 
 interface ImageT {
   blob: string
@@ -7,8 +7,6 @@ interface ImageT {
   timeStamp: string
   fileData: FileSystemFileEntry
 }
-
-type ImageIndexT = number
 
 const MONTHS_BY_INDEX = [
   null,
@@ -29,9 +27,7 @@ const MONTHS_BY_INDEX = [
 function useImagePlayer(images: ImageT[]) {
   const [playlistCursor, setPlaylistCursor] = useState(0)
   const [playlist, setPlaylist] = useState<number[] | []>([])
-  const [city, setCity] = useState('')
-  const [country, setCountry] = useState('')
-  const [exifExtracted, setExifExtracted] = useState({})
+
   const [objectFit, setObjectFit] = useState('cover')
   const [dateSorting, setDateSorting] = useState('')
 
@@ -80,71 +76,6 @@ function useImagePlayer(images: ImageT[]) {
       const day = dateParts[2]
       return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
     }
-  }
-
-  const getExifData = async (file) => {
-    const arrayBuffer = await file.arrayBuffer()
-    return EXIF.readFromBinaryFile(arrayBuffer)
-  }
-
-  const getGpsFromExif = (exifOverride?) => {
-    const exifToAnalyze = exifOverride || exifExtracted
-
-    if (Object.keys(exifToAnalyze).length === 0) {
-      return { isValid: false }
-    }
-
-    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      exifToAnalyze
-
-    if (
-      [GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef].includes(
-        undefined
-      )
-    ) {
-      return { isValid: false }
-    }
-
-    return {
-      GPSLatitude,
-      GPSLatitudeRef,
-      GPSLongitude,
-      GPSLongitudeRef,
-      isValid: true,
-    }
-  }
-
-  const updateGeoOnChange = async () => {
-    setExifExtracted({})
-    const imageIndex = playlist[playlistCursor]
-    const imageObj = images[imageIndex]
-    const fileData = imageObj?.fileData
-
-    if (!fileData) {
-      return
-    }
-
-    const exif = await getExifData(fileData)
-    setExifExtracted(exif)
-
-    const extractedGps = getGpsFromExif(exif)
-    if (!extractedGps.isValid) {
-      console.log('No GPS data found in Exif.')
-      setCity('')
-      setCountry('')
-      return
-    }
-
-    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      extractedGps
-
-    const res = await fetch(`
-      http://localhost:3001/geo_names?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
-    `)
-
-    const responseJson = await res.json()
-    setCity(responseJson.city)
-    setCountry(responseJson.country)
   }
 
   const handleToggleObjectFit = () => {
@@ -239,12 +170,14 @@ function useImagePlayer(images: ImageT[]) {
   }, [playlistCursor, images])
 
   useEffect(() => {
-    updateGeoOnChange()
-  }, [playlist, playlistCursor, images])
-
-  useEffect(() => {
     handleSortDate('asc')
   }, [])
+
+  const { city, country, gpsFromExif, exifExtracted } = useExif({
+    playlist,
+    playlistCursor,
+    images,
+  })
 
   return {
     thumbnails: getThumbnails(),
@@ -253,7 +186,7 @@ function useImagePlayer(images: ImageT[]) {
     city,
     country,
     objectFit,
-    gpsFromExif: getGpsFromExif(),
+    gpsFromExif,
     exifExtracted,
     dateSorting,
     keyDownHandler,
