@@ -166,7 +166,11 @@ const ButtonsRow = ({
           alignItems: 'center',
         }}
       >
-        <Button onClick={handleSortDate}>📅</Button>
+        <Button
+          onClick={() => handleSortDate(dateSorting === 'asc' ? 'desc' : 'asc')}
+        >
+          📅
+        </Button>
         <div style={{ fontSize: '15px' }}>{dateSorting}</div>
       </div>
       <Button onClick={navigateToEnd}>⏭</Button>

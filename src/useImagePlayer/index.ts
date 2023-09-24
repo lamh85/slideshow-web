@@ -105,13 +105,12 @@ function useImagePlayer(images: ImageT[]) {
         return nextState === 'asc' ? -1 : 1
       }
     })
-
     const newPlaylist = sorted.map((image) => image.imagesIndex)
     setPlaylist(newPlaylist)
   }
 
   const randomizeArray = (array) => {
-    return array.sort((a, b) => {
+    return [...array].sort((a, b) => {
       const randomNumber = Math.random()
 
       if (randomNumber > 0.5) {
@@ -123,8 +122,9 @@ function useImagePlayer(images: ImageT[]) {
   }
 
   const handleShuffleClick = (_event) => {
-    console.log('shuffling')
-    setPlaylist(randomizeArray(playlist))
+    const newPlaylist = randomizeArray(playlist)
+    setPlaylist(newPlaylist)
+    setPlaylistCursor(0)
     setDateSorting('random')
   }
 

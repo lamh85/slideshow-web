@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import { Toolbar } from './Toolbar'
-import useImagePlayer from '../useImagePlayer.ts'
+import useImagePlayer from '../useImagePlayer'
 
 const Slideshow = ({ isLoadingImages, images }) => {
   const {
