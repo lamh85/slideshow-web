@@ -92,7 +92,7 @@ export const Toolbar = ({
 }
 
 const Location = ({ city, country }) => {
-  if (city.length === 0 || country.length === 0) {
+  if (!city || !country || city.length === 0 || country.length === 0) {
     return <div>No location data found.</div>
   }
 
@@ -166,7 +166,11 @@ const ButtonsRow = ({
           alignItems: 'center',
         }}
       >
-        <Button onClick={handleSortDate}>📅</Button>
+        <Button
+          onClick={() => handleSortDate(dateSorting === 'asc' ? 'desc' : 'asc')}
+        >
+          📅
+        </Button>
         <div style={{ fontSize: '15px' }}>{dateSorting}</div>
       </div>
       <Button onClick={navigateToEnd}>⏭</Button>

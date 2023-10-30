@@ -4,10 +4,7 @@ import Slideshow from './Slideshow'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
-  const [playlist, setPlaylist] = useState([]) // Image indices
-  const [playlistCursor, setPlaylistCursor] = useState()
   const [images, setImages] = useState([]) // List of blob URLs
-  const [played, setPlayed] = useState([]) // Image indices
 
   const getTimeStamp = (fileName) => {
     // EG: IMG_20191114_145429
@@ -57,29 +54,12 @@ function App() {
 
     setImages(images)
     setIsLoadingImages(false)
-    setPlayed([0])
-    setPlaylistCursor(0)
-
-    const indices = Array(images.length)
-      .fill('')
-      .map((_item, index) => index)
-    setPlaylist(indices)
   }
 
   return (
     <div className="App" style={{ width: '100%', height: '100%' }}>
       {!isLoadingImages ? (
-        <Slideshow
-          isLoadingImages={isLoadingImages}
-          playlist={playlist}
-          setPlaylist={setPlaylist}
-          playlistCursor={playlistCursor}
-          setPlaylistCursor={setPlaylistCursor}
-          images={images}
-          setImages={setImages}
-          played={played}
-          setPlayed={setPlayed}
-        />
+        <Slideshow isLoadingImages={isLoadingImages} images={images} />
       ) : (
         <button onClick={uploadClickHandler}>CLICK ME</button>
       )}
