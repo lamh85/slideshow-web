@@ -75,13 +75,23 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
       extractedGps
 
-    const res = await fetch(`
-      http://localhost:3001/geo_names?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
-    `)
+    const fetchOptions = {
+      headers: {
+        Accept: 'application/json',
+      },
+    }
+
+    const res = await fetch(
+      `
+      http://localhost:3000/locations?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
+    `,
+      fetchOptions
+    )
 
     const responseJson = await res.json()
-    setCity(responseJson.city)
-    setCountry(responseJson.country)
+    const location = responseJson[0]
+    setCity(location.name)
+    setCountry(location.country)
   }
 
   useEffect(() => {
