@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import EXIF from 'exif-js'
+import env from 'react-dotenv'
 
 interface ImageT {
   blob: string
@@ -83,7 +84,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
 
     const res = await fetch(
       `
-      http://localhost:3000/locations?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
+      ${env.API_URL}/locations?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
     `,
       fetchOptions
     )
