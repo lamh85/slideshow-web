@@ -15,17 +15,26 @@ interface InitialStatesT {
   images: ImageT[]
 }
 
+interface ExifReadResultT {
+  GPSLatitude?: number[]
+  GPSLatitudeRef?: 'N' | 'S'
+  GPSLongitude?: number[]
+  GPSLongitudeRef?: 'W' | 'E'
+}
+
 function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
   const [exifExtracted, setExifExtracted] = useState({})
 
-  const getExifData = async (file) => {
+  const getExifData = async (file): Promise<ExifReadResultT> => {
     const arrayBuffer = await file.arrayBuffer()
     return EXIF.readFromBinaryFile(arrayBuffer)
   }
 
-  const getGpsFromExif = (exifOverride?) => {
+  const getGpsFromExif = (
+    exifOverride?
+  ): ExifReadResultT & { isValid: boolean } => {
     const exifToAnalyze = exifOverride || exifExtracted
 
     if (Object.keys(exifToAnalyze).length === 0) {
@@ -52,6 +61,38 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     }
   }
 
+  const getLocationName = async (exifData) => {
+    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
+      exifData
+
+    const [latitudeDegrees, latitudeMinutes] = GPSLatitude
+    const [longitudeDegrees, longitudeMinutes] = GPSLongitude
+
+    const params = new URLSearchParams()
+    const paramPairs = [
+      ['longitude_degrees', longitudeDegrees],
+      ['longitude_minutes', longitudeMinutes],
+      ['longitude_direction', GPSLongitudeRef],
+      ['latitude_degrees', latitudeDegrees],
+      ['latitude_minutes', latitudeMinutes],
+      ['latitude_direction', GPSLatitudeRef],
+    ]
+    paramPairs.forEach((pair) => params.set(pair[0], pair[1]))
+
+    const fetchOptions = {
+      headers: {
+        Accept: 'application/json',
+      },
+    }
+
+    const res = await fetch(
+      `${env.API_URL}/locations?${params.toString()}`,
+      fetchOptions
+    )
+
+    return await res.json()
+  }
+
   const updateGeoOnChange = async () => {
     setExifExtracted({})
     const imageIndex = playlist[playlistCursor]
@@ -73,24 +114,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
       return
     }
 
-    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      extractedGps
-
-    const fetchOptions = {
-      headers: {
-        Accept: 'application/json',
-      },
-    }
-
-    const res = await fetch(
-      `
-      ${env.API_URL}/locations?longitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
-    `,
-      fetchOptions
-    )
-
-    const responseJson = await res.json()
-    const location = responseJson[0]
+    const location = await getLocationName(extractedGps)
     setCity(location.name)
     setCountry(location.country)
   }
