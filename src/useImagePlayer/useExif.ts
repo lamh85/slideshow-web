@@ -84,7 +84,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
 
     const res = await fetch(
       `
-      ${env.API_URL}/locations?longtitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longtitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
+      ${env.API_URL}/locations?longitude=${GPSLongitude[0]}°${GPSLongitude[1]}&longitudeDirection=${GPSLongitudeRef}&latitude=${GPSLatitude[0]}°${GPSLatitude[1]}&latitudeDirection=${GPSLatitudeRef}
     `,
       fetchOptions
     )
