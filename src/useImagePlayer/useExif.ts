@@ -115,7 +115,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     }
 
     const location = await getLocationName(extractedGps)
-    setCity(location.name)
+    setCity(location.city)
     setCountry(location.country)
   }
 
