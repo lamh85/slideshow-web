@@ -32,32 +32,17 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     return EXIF.readFromBinaryFile(arrayBuffer)
   }
 
-  const getGpsFromExif = (
-    exifOverride?
-  ): ExifReadResultT & { isValid: boolean } => {
+  const getGpsFromExif = (exifOverride?): ExifReadResultT => {
     const exifToAnalyze = exifOverride || exifExtracted
-
-    if (Object.keys(exifToAnalyze).length === 0) {
-      return { isValid: false }
-    }
 
     const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
       exifToAnalyze
-
-    if (
-      [GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef].includes(
-        undefined
-      )
-    ) {
-      return { isValid: false }
-    }
 
     return {
       GPSLatitude,
       GPSLatitudeRef,
       GPSLongitude,
       GPSLongitudeRef,
-      isValid: true,
     }
   }
 
@@ -107,12 +92,6 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     setExifExtracted(exif)
 
     const extractedGps = getGpsFromExif(exif)
-    if (!extractedGps.isValid) {
-      console.log('No GPS data found in Exif.')
-      setCity('')
-      setCountry('')
-      return
-    }
 
     const location = await getLocationName(extractedGps)
     setCity(location.city)
