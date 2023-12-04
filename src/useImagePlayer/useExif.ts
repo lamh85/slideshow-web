@@ -26,6 +26,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
   const [exifExtracted, setExifExtracted] = useState({})
+  const [isLoadingGeoNames, setIsLoadingGeoNames] = useState(false)
 
   const getExifData = async (file): Promise<ExifReadResultT> => {
     const arrayBuffer = await file.arrayBuffer()
@@ -79,6 +80,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
   }
 
   const updateGeoOnChange = async () => {
+    setIsLoadingGeoNames(true)
     setExifExtracted({})
     const imageIndex = playlist[playlistCursor]
     const imageObj = images[imageIndex]
@@ -98,12 +100,14 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     if (!isValidGps) {
       setCity(null)
       setCountry(null)
+      setIsLoadingGeoNames(false)
       return
     }
 
     const location = await getLocationName(extractedGps)
     setCity(location.city)
     setCountry(location.country)
+    setIsLoadingGeoNames(false)
   }
 
   useEffect(() => {
@@ -115,6 +119,7 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     country,
     gpsFromExif: getGpsFromExif(),
     exifExtracted,
+    isLoadingGeoNames,
   }
 }
 

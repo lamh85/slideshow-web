@@ -173,11 +173,12 @@ function useImagePlayer(images: ImageT[]) {
     handleSortDate('asc')
   }, [])
 
-  const { city, country, gpsFromExif, exifExtracted } = useExif({
-    playlist,
-    playlistCursor,
-    images,
-  })
+  const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
+    useExif({
+      playlist,
+      playlistCursor,
+      images,
+    })
 
   return {
     thumbnails: getThumbnails(),
@@ -188,6 +189,7 @@ function useImagePlayer(images: ImageT[]) {
     objectFit,
     gpsFromExif,
     exifExtracted,
+    isLoadingGeoNames,
     dateSorting,
     keyDownHandler,
     sort: handleSortDate,

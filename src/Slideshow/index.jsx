@@ -11,6 +11,7 @@ const Slideshow = ({ isLoadingImages, images }) => {
     objectFit,
     gpsFromExif,
     exifExtracted,
+    isLoadingGeoNames,
     dateSorting,
     keyDownHandler,
     sort,
@@ -59,6 +60,7 @@ const Slideshow = ({ isLoadingImages, images }) => {
         navigateToEnd={() => navigate(images.length - 1)}
         city={city}
         country={country}
+        isLoadingGeoNames={isLoadingGeoNames}
         objectFit={objectFit}
         date={date}
       />
