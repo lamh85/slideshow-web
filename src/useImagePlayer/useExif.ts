@@ -93,6 +93,14 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
 
     const extractedGps = getGpsFromExif(exif)
 
+    const isValidGps = Object.values(extractedGps).every((item) => !!item)
+
+    if (!isValidGps) {
+      setCity(null)
+      setCountry(null)
+      return
+    }
+
     const location = await getLocationName(extractedGps)
     setCity(location.city)
     setCountry(location.country)
