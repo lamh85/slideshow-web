@@ -11,6 +11,7 @@ export const Toolbar = ({
   navigateToEnd,
   city,
   country,
+  isLoadingGeoNames,
   objectFit,
   date,
 }) => {
@@ -75,7 +76,11 @@ export const Toolbar = ({
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
           <div>{date}</div>
-          <Location city={city} country={country} />
+          <Location
+            city={city}
+            country={country}
+            isLoadingGeoNames={isLoadingGeoNames}
+          />
         </div>
         <ButtonsRow
           navigateToHome={navigateToHome}
@@ -91,7 +96,11 @@ export const Toolbar = ({
   )
 }
 
-const Location = ({ city, country }) => {
+const Location = ({ city, country, isLoadingGeoNames }) => {
+  if (isLoadingGeoNames) {
+    return <div>Loading city and country...</div>
+  }
+
   if (!city || !country || city.length === 0 || country.length === 0) {
     return <div>No location data found.</div>
   }
