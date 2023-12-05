@@ -9,6 +9,7 @@ export const Toolbar = ({
   handleSortDate,
   navigateToHome,
   navigateToEnd,
+  navigateToIndex,
   city,
   country,
   isLoadingGeoNames,
@@ -46,19 +47,20 @@ export const Toolbar = ({
           justifyContent: 'center',
         }}
       >
-        {thumbnails.map((url) => {
-          const isCurrent = url === currentImage.blob
+        {thumbnails.map((thumbnail) => {
+          const isCurrent = thumbnail.blob === currentImage.blob
 
           return (
             <img
-              src={url}
+              src={thumbnail.blob}
               style={{
                 width: '100px',
                 height: '50px',
                 border: isCurrent ? '3px solid yellow' : 'none',
               }}
-              key={url}
+              key={thumbnail.blob}
               alt="Thumbnail"
+              onClick={() => navigateToIndex(thumbnail.playlistCursor)}
             />
           )
         })}
