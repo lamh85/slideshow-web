@@ -57,6 +57,7 @@ export const Toolbar = ({
                 width: '100px',
                 height: '50px',
                 border: isCurrent ? '3px solid yellow' : 'none',
+                cursor: 'pointer',
               }}
               key={thumbnail.blob}
               alt="Thumbnail"
