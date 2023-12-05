@@ -24,14 +24,27 @@ const MONTHS_BY_INDEX = [
   'December',
 ]
 
+type NavigateArgsT = {
+  increment: number
+  index: number
+}
+
+type ThumbnailT = {
+  playlistCursor: number
+  blob: string
+}
+
 function useImagePlayer(images: ImageT[]) {
   const [playlistCursor, setPlaylistCursor] = useState(0)
+  // Each number is an index of `images` array
+  // image = [{}, {}, {}]
+  // playlist = [2, 0, 1]
   const [playlist, setPlaylist] = useState<number[] | []>([])
 
   const [objectFit, setObjectFit] = useState('cover')
   const [dateSorting, setDateSorting] = useState('')
 
-  const getThumbnails = () => {
+  const getThumbnails = (): ThumbnailT[] => {
     const thumbCountBefore = 2
     const thumbCountAfter = 2
 
@@ -41,7 +54,13 @@ function useImagePlayer(images: ImageT[]) {
       playlistCursor + thumbCountAfter + 1
     )
     const imageIndices = playlist.slice(sliceStart, sliceAfter)
-    return imageIndices.map((query) => images[query].blob)
+
+    return imageIndices.map((imageIndex) => {
+      return {
+        playlistCursor: playlist.findIndex((item) => item === imageIndex),
+        blob: images[imageIndex].blob,
+      }
+    })
   }
 
   const getMainImage = () => {
@@ -128,7 +147,7 @@ function useImagePlayer(images: ImageT[]) {
     setDateSorting('random')
   }
 
-  const navigatePlaylist = (increment) => {
+  const incrementPlaylistCursor = (increment: number) => {
     const maxPosition = images.length - 1
 
     if (increment > 0 && playlistCursor === maxPosition) {
@@ -137,6 +156,15 @@ function useImagePlayer(images: ImageT[]) {
       setPlaylistCursor(maxPosition)
     } else {
       setPlaylistCursor(playlistCursor + increment)
+    }
+  }
+
+  const navigatePlaylist = (args: Partial<NavigateArgsT>) => {
+    if (args.increment) {
+      incrementPlaylistCursor(args.increment)
+      return
+    } else if (args.index) {
+      setPlaylistCursor(args.index)
     }
   }
 
@@ -153,7 +181,7 @@ function useImagePlayer(images: ImageT[]) {
       increment = -1
     }
 
-    navigatePlaylist(increment)
+    navigatePlaylist({ increment })
   }
 
   useEffect(() => {

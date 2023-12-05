@@ -58,6 +58,7 @@ const Slideshow = ({ isLoadingImages, images }) => {
         handleSortDate={sort}
         navigateToHome={() => navigate(0)}
         navigateToEnd={() => navigate(images.length - 1)}
+        navigateToIndex={(index) => navigate({ index })}
         city={city}
         country={country}
         isLoadingGeoNames={isLoadingGeoNames}
