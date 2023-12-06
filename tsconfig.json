@@ -2,6 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "jsx": "react"
   },
 }
