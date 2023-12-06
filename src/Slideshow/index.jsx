@@ -1,5 +1,6 @@
 import { Toolbar } from './Toolbar'
 import useImagePlayer from '../useImagePlayer'
+import { SlideshowContext } from './SlideshowContext'
 
 const Slideshow = ({ isLoadingImages, images }) => {
   const {
@@ -32,40 +33,44 @@ const Slideshow = ({ isLoadingImages, images }) => {
   }
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <img
-        alt="something"
-        src={mainImage?.blob || ''}
-        style={{ width: '100%', height: '100%', objectFit }}
-        onKeyDown={keyDownHandler}
-      />
-      <div
-        style={{
-          background: 'white',
-          left: 0,
-          bottom: 0,
-          position: 'absolute',
-        }}
-      >
-        {getGpsString()}
+    <SlideshowContext.Provider
+      value={{
+        handleShuffleClick: randomizeSort,
+        thumbnails,
+        currentImage: mainImage,
+        handleToggleObjectFit: setObjectFit,
+        dateSorting: dateSorting,
+        handleSortDate: sort,
+        navigateToHome: () => navigate(0),
+        navigateToEnd: () => navigate(images.length - 1),
+        navigateToIndex: (index) => navigate({ index }),
+        city,
+        country,
+        isLoadingGeoNames,
+        objectFit,
+        date,
+      }}
+    >
+      <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+        <img
+          alt="something"
+          src={mainImage?.blob || ''}
+          style={{ width: '100%', height: '100%', objectFit }}
+          onKeyDown={keyDownHandler}
+        />
+        <div
+          style={{
+            background: 'white',
+            left: 0,
+            bottom: 0,
+            position: 'absolute',
+          }}
+        >
+          {getGpsString()}
+        </div>
+        <Toolbar />
       </div>
-      <Toolbar
-        handleShuffleClick={randomizeSort}
-        thumbnails={thumbnails}
-        currentImage={mainImage}
-        handleToggleObjectFit={setObjectFit}
-        dateSorting={dateSorting}
-        handleSortDate={sort}
-        navigateToHome={() => navigate(0)}
-        navigateToEnd={() => navigate(images.length - 1)}
-        navigateToIndex={(index) => navigate({ index })}
-        city={city}
-        country={country}
-        isLoadingGeoNames={isLoadingGeoNames}
-        objectFit={objectFit}
-        date={date}
-      />
-    </div>
+    </SlideshowContext.Provider>
   )
 }
 

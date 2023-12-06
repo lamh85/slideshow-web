@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useExif from './useExif.ts'
 
-interface ImageT {
+export interface ImageT {
   blob: string
   name: string
   timeStamp: string
@@ -29,7 +29,7 @@ type NavigateArgsT = {
   index: number
 }
 
-type ThumbnailT = {
+export type ThumbnailT = {
   playlistCursor: number
   blob: string
 }

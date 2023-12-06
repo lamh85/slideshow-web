@@ -1,26 +1,15 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { SlideshowContext } from './SlideshowContext'
 
-export const Toolbar = ({
-  handleShuffleClick,
-  thumbnails,
-  currentImage,
-  handleToggleObjectFit,
-  dateSorting,
-  handleSortDate,
-  navigateToHome,
-  navigateToEnd,
-  navigateToIndex,
-  city,
-  country,
-  isLoadingGeoNames,
-  objectFit,
-  date,
-}) => {
+export const Toolbar = () => {
   const [shouldVisible, setShouldVisible] = useState(true)
 
   const handleMouseEnter = () => setShouldVisible(true)
 
   const handleMouseLeave = () => setShouldVisible(false)
+
+  const { thumbnails, currentImage, navigateToIndex, date } =
+    useContext(SlideshowContext)
 
   return (
     <div
@@ -79,27 +68,17 @@ export const Toolbar = ({
           style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
         >
           <div>{date}</div>
-          <Location
-            city={city}
-            country={country}
-            isLoadingGeoNames={isLoadingGeoNames}
-          />
+          <Location />
         </div>
-        <ButtonsRow
-          navigateToHome={navigateToHome}
-          handleShuffleClick={handleShuffleClick}
-          handleToggleObjectFit={handleToggleObjectFit}
-          objectFit={objectFit}
-          handleSortDate={handleSortDate}
-          dateSorting={dateSorting}
-          navigateToEnd={navigateToEnd}
-        />
+        <ButtonsRow />
       </div>
     </div>
   )
 }
 
-const Location = ({ city, country, isLoadingGeoNames }) => {
+const Location = () => {
+  const { city, country, isLoadingGeoNames } = useContext(SlideshowContext)
+
   if (isLoadingGeoNames) {
     return <div>Loading city and country...</div>
   }
@@ -146,15 +125,17 @@ const Button = (props) => {
   )
 }
 
-const ButtonsRow = ({
-  navigateToHome,
-  handleShuffleClick,
-  handleToggleObjectFit,
-  objectFit,
-  handleSortDate,
-  dateSorting,
-  navigateToEnd,
-}) => {
+const ButtonsRow = () => {
+  const {
+    navigateToHome,
+    handleShuffleClick,
+    handleToggleObjectFit,
+    objectFit,
+    handleSortDate,
+    dateSorting,
+    navigateToEnd,
+  } = useContext(SlideshowContext)
+
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
       <Button onClick={navigateToHome}>⏮</Button>
