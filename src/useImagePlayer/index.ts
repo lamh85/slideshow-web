@@ -41,7 +41,7 @@ function useImagePlayer(images: ImageT[]) {
   // playlist = [2, 0, 1]
   const [playlist, setPlaylist] = useState<number[] | []>([])
 
-  const [objectFit, setObjectFit] = useState('cover')
+  const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover')
   const [dateSorting, setDateSorting] = useState('')
 
   const getThumbnails = (): ThumbnailT[] => {
