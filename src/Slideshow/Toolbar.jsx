@@ -134,6 +134,7 @@ const ButtonsRow = () => {
     handleSortDate,
     dateSorting,
     navigateToEnd,
+    currentImage,
   } = useContext(SlideshowContext)
 
   return (
@@ -167,6 +168,9 @@ const ButtonsRow = () => {
         <div style={{ fontSize: '15px' }}>{dateSorting}</div>
       </div>
       <Button onClick={navigateToEnd}>⏭</Button>
+      <Button onClick={() => window.open(currentImage?.blob, '_blank').focus()}>
+        👁
+      </Button>
     </div>
   )
 }
