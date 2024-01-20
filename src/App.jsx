@@ -56,12 +56,26 @@ function App() {
     setIsLoadingImages(false)
   }
 
+  const handleFileSelected = (event) => {
+    console.log(event)
+  }
+
   return (
     <div className="App" style={{ width: '100%', height: '100%' }}>
       {!isLoadingImages ? (
         <Slideshow isLoadingImages={isLoadingImages} images={images} />
       ) : (
-        <button onClick={uploadClickHandler}>CLICK ME</button>
+        <div>
+          <div>Select a folder</div>
+          <input
+            onChange={handleFileSelected}
+            type="file"
+            id="uploader"
+            multiple
+            directory=""
+            webkitdirectory=""
+          />
+        </div>
       )}
     </div>
   )
