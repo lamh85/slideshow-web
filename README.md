@@ -8,6 +8,8 @@ This app basically runs a slideshow by choosing a folder containing your photos.
 
 Install the NPM dependencies.
 
+`npm run start`
+
 Open localhost in your web browser.
 
 Choose a folder that contains your images.
@@ -19,6 +21,6 @@ To navigate through the images:
 Other features:
 * Sort the images by date.
 * Randomly sort the images.
-* If there is geo data, then the app displays the city's name and country's flag. This requires running the API: https://github.com/lamh85/slideshow-rails
+* If there is geo data, then the app displays the city's name and country's flag. This requires (1) running the API (https://github.com/lamh85/slideshow-rails), and (2) setting the environmental variable `API_URL` in the file `.env`
 
 # To be added later: demo video and screenshots
