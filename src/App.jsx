@@ -61,7 +61,7 @@ function App() {
       {!isLoadingImages ? (
         <Slideshow isLoadingImages={isLoadingImages} images={images} />
       ) : (
-        <button onClick={uploadClickHandler}>CLICK ME</button>
+        <button onClick={uploadClickHandler}>Select a folder of images</button>
       )}
     </div>
   )
