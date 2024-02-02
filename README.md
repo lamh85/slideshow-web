@@ -23,6 +23,8 @@ Other features:
 * Randomly sort the images.
 * If there is geo data, then the app displays the city's name and country's flag. This requires (1) running the API (https://github.com/lamh85/slideshow-rails), and (2) setting the environmental variable `API_URL` in the file `.env`
 
+Django API - I sometimes try to learn Python, so I created a Django project here: https://github.com/lamh85/slideshow-django. It may not be currently functional.
+
 # Demo
 
 ## Demo video part 1
