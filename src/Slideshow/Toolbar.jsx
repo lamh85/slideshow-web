@@ -17,16 +17,18 @@ export const Toolbar = () => {
       onMouseLeave={handleMouseLeave}
       style={{
         position: 'absolute',
-        bottom: 100,
         background: 'white',
         padding: '1em',
         fontWeight: 'bold',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        opacity: shouldVisible ? 1 : 0.1,
+        opacity: shouldVisible ? 0.75 : 0.1,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '150px',
+        boxSizing: 'border-box',
       }}
     >
       <div
