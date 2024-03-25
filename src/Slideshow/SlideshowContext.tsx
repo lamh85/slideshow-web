@@ -70,8 +70,8 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
         handleToggleObjectFit: setObjectFit,
         dateSorting: dateSorting,
         handleSortDate: sort,
-        navigateToHome: () => navigate({ index: 0}),
-        navigateToEnd: () => navigate({ index: props.images.length - 1}),
+        navigateToHome: () => navigate({ index: 0 }),
+        navigateToEnd: () => navigate({ index: props.images.length - 1 }),
         navigateToIndex: (index) => navigate({ index }),
         city,
         country,
@@ -81,7 +81,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
         gpsFromExif,
         exifExtracted,
         keyDownHandler,
-        gpsString: getGpsString()
+        gpsString: getGpsString(),
       }}
     >
       {props.children}
