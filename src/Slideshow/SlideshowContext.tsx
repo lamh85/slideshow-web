@@ -6,7 +6,7 @@ type ContextPropsT = {
   thumbnails: ThumbnailT[]
   currentImage: ImageT
   handleToggleObjectFit: () => void
-  dateSorting: string
+  dateSorting: 'asc' | 'desc' | 'random'
   handleSortDate: (override?: string) => void
   navigateToHome: () => void
   navigateToEnd: () => void

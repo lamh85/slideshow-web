@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react'
-import { SlideshowContext } from './SlideshowContext'
+import { SlideshowContext } from '../SlideshowContext'
+import { DateForm } from './DateForm'
 
 export const Toolbar = () => {
   const [shouldVisible, setShouldVisible] = useState(true)
@@ -73,6 +74,7 @@ export const Toolbar = () => {
           <Location />
         </div>
         <ButtonsRow />
+        <DateForm />
       </div>
     </div>
   )
