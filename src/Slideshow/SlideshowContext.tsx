@@ -11,6 +11,7 @@ type ContextPropsT = {
   navigateToHome: () => void
   navigateToEnd: () => void
   navigateToIndex: (index: number) => void
+  navigateToDate: (date: string) => void
   city: string
   country: string
   isLoadingGeoNames: boolean
@@ -44,6 +45,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
     keyDownHandler,
     sort,
     navigate,
+    navigateToDate,
     setObjectFit,
     randomizeSort,
   } = useImagePlayer(props.images)
@@ -73,6 +75,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
         navigateToHome: () => navigate({ index: 0 }),
         navigateToEnd: () => navigate({ index: props.images.length - 1 }),
         navigateToIndex: (index) => navigate({ index }),
+        navigateToDate,
         city,
         country,
         isLoadingGeoNames,
