@@ -2,6 +2,7 @@ import React, { createContext } from 'react'
 import useImagePlayer, { ImageT, ThumbnailT } from '../useImagePlayer'
 
 type ContextPropsT = {
+  images: ImageT[]
   handleShuffleClick: (event: any) => void
   thumbnails: ThumbnailT[]
   currentImage: ImageT
@@ -66,6 +67,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
   return (
     <SlideshowContext.Provider
       value={{
+        images: props.images,
         handleShuffleClick: randomizeSort,
         thumbnails,
         currentImage: mainImage,

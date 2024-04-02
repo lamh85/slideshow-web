@@ -173,7 +173,8 @@ function useImagePlayer(images: ImageT[]) {
   const navigateToDate = (selectedDate: string) => {
     if (
       !['asc', 'desc'].includes(dateSorting) ||
-      selectedDate.match(/[0-9]{4}-[0-9]{2}/) === null
+      // Must be YYYY or YYYY-MM
+      selectedDate.match(/[0-9]{4}(-[0-9]{2})?/) === null
     ) {
       return
     }
