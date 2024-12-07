@@ -13,7 +13,11 @@ export const DateForm = () => {
   const [yearSelected, setYearSelected] = useState(() => getImageYears()[0])
 
   if (dateSorting === 'random') {
-    return <div>Sort by date to enable date navigation.</div>
+    return (
+      <div style={{ fontSize: '17px', textAlign: 'left', marginLeft: '10px' }}>
+        Sort by date to <br /> enable date navigation.
+      </div>
+    )
   }
 
   return (
