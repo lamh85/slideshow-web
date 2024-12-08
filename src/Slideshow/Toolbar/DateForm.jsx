@@ -12,25 +12,31 @@ export const DateForm = () => {
 
   const [yearSelected, setYearSelected] = useState(() => getImageYears()[0])
 
+  const baseStyles = { marginLeft: '10px' }
+  const fontStyle = { fontSize: '17px' }
+
   if (dateSorting === 'random') {
     return (
-      <div style={{ fontSize: '17px', textAlign: 'left', marginLeft: '10px' }}>
+      <div style={{ ...baseStyles, ...fontStyle, textAlign: 'left' }}>
         Sort by date to <br /> enable date navigation.
       </div>
     )
   }
 
   return (
-    <div>
-      <select
-        value={yearSelected}
-        onChange={(event) => setYearSelected(event.target.value)}
-      >
-        {getImageYears().map((year, index) => (
-          <option key={index}>{year}</option>
-        ))}
-      </select>
-      <button onClick={() => navigateToDate(yearSelected)}>NAVIGATE!</button>
+    <div style={baseStyles}>
+      <div style={{ ...fontStyle, marginBottom: '10px' }}>Date Navigation</div>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <select
+          value={yearSelected}
+          onChange={(event) => setYearSelected(event.target.value)}
+        >
+          {getImageYears().map((year, index) => (
+            <option key={index}>{year}</option>
+          ))}
+        </select>
+        <button onClick={() => navigateToDate(yearSelected)}>Submit</button>
+      </div>
     </div>
   )
 }
