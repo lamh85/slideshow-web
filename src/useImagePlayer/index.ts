@@ -42,7 +42,9 @@ function useImagePlayer(images: ImageT[]) {
   const [playlist, setPlaylist] = useState<number[] | []>([])
 
   const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover')
-  const [dateSorting, setDateSorting] = useState('')
+  const [dateSorting, setDateSorting] = useState<'asc' | 'desc' | 'random'>(
+    'asc'
+  )
 
   const getThumbnails = (): ThumbnailT[] => {
     const thumbCountBefore = 2
@@ -168,6 +170,35 @@ function useImagePlayer(images: ImageT[]) {
     }
   }
 
+  const navigateToDate = (selectedDate: string) => {
+    if (
+      !['asc', 'desc'].includes(dateSorting) ||
+      // Must be YYYY or YYYY-MM
+      selectedDate.match(/[0-9]{4}(-[0-9]{2})?/) === null
+    ) {
+      return
+    }
+
+    const playlistWithDates = playlist.map((imageIndex: number) => ({
+      index: imageIndex,
+      timeStamp: images[imageIndex].timeStamp,
+    }))
+
+    const filteredByDate = playlistWithDates.filter((image) => {
+      if (dateSorting === 'asc') {
+        return image.timeStamp >= selectedDate
+      } else {
+        return image.timeStamp <= selectedDate
+      }
+    })
+
+    const playlistIndex = playlist.findIndex(
+      (imageIndex) => imageIndex === filteredByDate[0].index
+    )
+
+    navigatePlaylist({ index: playlistIndex })
+  }
+
   const keyDownHandler = (event) => {
     const { code } = event
 
@@ -222,6 +253,7 @@ function useImagePlayer(images: ImageT[]) {
     keyDownHandler,
     sort: handleSortDate,
     navigate: navigatePlaylist,
+    navigateToDate,
     setObjectFit: handleToggleObjectFit,
     randomizeSort: handleShuffleClick,
   }
