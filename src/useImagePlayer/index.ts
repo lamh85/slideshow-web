@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useExif from './useExif.ts'
+import { fileNameToMoment } from '../helpers/time'
 
 export interface ImageT {
   blob: string
@@ -80,23 +81,12 @@ function useImagePlayer(images: ImageT[]) {
 
     const fileName = mainImage.name
 
-    // EG: IMG_20191114_145429
-    if (fileName.slice(0, 3) === 'IMG') {
-      const dateRaw = fileName.slice(4, 12)
-      const year = dateRaw.slice(0, 4)
-      const month = dateRaw.slice(4, 6)
-      const day = dateRaw.slice(6, 9)
+    const momentDate = fileNameToMoment(fileName)
+    const date = momentDate.date()
+    const monthName = MONTHS_BY_INDEX[momentDate.month()]
+    const year = momentDate.year()
 
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    } else {
-      // EG: 2017-04-14 12.05.33
-      const dateRaw = fileName.slice(0, 10)
-      const dateParts = dateRaw.split('-')
-      const year = dateParts[0]
-      const month = dateParts[1]
-      const day = dateParts[2]
-      return `${Number(day)} ${MONTHS_BY_INDEX[Number(month)]} ${year}`
-    }
+    return `${date} ${monthName} ${year}`
   }
 
   const handleToggleObjectFit = () => {

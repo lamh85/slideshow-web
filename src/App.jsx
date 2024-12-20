@@ -1,29 +1,14 @@
 import { useState } from 'react'
 import './App.css'
 import Slideshow from './Slideshow'
+import { fileNameToMoment } from './helpers/time'
 
 function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
   const [images, setImages] = useState([]) // List of blob URLs
 
   const getTimeStamp = (fileName) => {
-    // EG: IMG_20191114_145429
-    if (fileName.slice(0, 3) === 'IMG') {
-      const dateRaw = fileName.slice(4, 12)
-      const year = dateRaw.slice(0, 4)
-      const month = dateRaw.slice(4, 6)
-      const day = dateRaw.slice(6, 9)
-
-      return `${year}-${month}-${day}`
-    } else {
-      // EG: 2017-04-14 12.05.33
-      const dateRaw = fileName.slice(0, 10)
-      const dateParts = dateRaw.split('-')
-      const year = dateParts[0]
-      const month = dateParts[1]
-      const day = dateParts[2]
-      return `${year}-${month}-${day}`
-    }
+    return fileNameToMoment(fileName).toISOString().split('T')[0]
   }
 
   const uploadClickHandler = async () => {
