@@ -1,5 +1,6 @@
 import React, { createContext } from 'react'
-import useImagePlayer, { ImageT, ThumbnailT } from '../useImagePlayer'
+import useExif from '../hooks/useExif'
+import useImagePlayer, { ImageT, ThumbnailT } from '../hooks/useImagePlayer'
 
 type ContextPropsT = {
   images: ImageT[]
@@ -33,15 +34,12 @@ type ProviderPropsT = {
 
 export const SlideshowProvider = (props: ProviderPropsT) => {
   const {
+    playlist,
+    playlistCursor,
     thumbnails,
     mainImage,
     date,
-    city,
-    country,
     objectFit,
-    gpsFromExif,
-    exifExtracted,
-    isLoadingGeoNames,
     dateSorting,
     keyDownHandler,
     sort,
@@ -50,6 +48,15 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
     setObjectFit,
     randomizeSort,
   } = useImagePlayer(props.images)
+
+  const getCurrentImageFileData = () => {
+    const imageIndex = playlist[playlistCursor]
+    const imageObj = props.images[imageIndex]
+    return imageObj?.fileData
+  }
+
+  const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
+    useExif(getCurrentImageFileData())
 
   const getGpsString = () => {
     const isValidGps = Object.values(gpsFromExif).every((item) => !!item)
