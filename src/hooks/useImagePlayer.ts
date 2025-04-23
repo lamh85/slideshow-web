@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import useExif from './useExif.ts'
 import { fileNameToMoment } from '../helpers/time'
 
 export interface ImageT {
@@ -222,23 +221,13 @@ function useImagePlayer(images: ImageT[]) {
     handleSortDate('asc')
   }, [])
 
-  const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
-    useExif({
-      playlist,
-      playlistCursor,
-      images,
-    })
-
   return {
+    playlist,
+    playlistCursor,
     thumbnails: getThumbnails(),
     mainImage: getMainImage(),
     date: getDate(),
-    city,
-    country,
     objectFit,
-    gpsFromExif,
-    exifExtracted,
-    isLoadingGeoNames,
     dateSorting,
     keyDownHandler,
     sort: handleSortDate,
