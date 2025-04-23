@@ -222,12 +222,14 @@ function useImagePlayer(images: ImageT[]) {
     handleSortDate('asc')
   }, [])
 
+  const getCurrentImageFileData = () => {
+    const imageIndex = playlist[playlistCursor]
+    const imageObj = images[imageIndex]
+    return imageObj?.fileData
+  }
+
   const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
-    useExif({
-      playlist,
-      playlistCursor,
-      images,
-    })
+    useExif(getCurrentImageFileData())
 
   return {
     thumbnails: getThumbnails(),

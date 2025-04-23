@@ -1,19 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import EXIF from 'exif-js'
 import env from 'react-dotenv'
-
-interface ImageT {
-  blob: string
-  name: string
-  timeStamp: string
-  fileData: FileSystemFileEntry
-}
-
-interface InitialStatesT {
-  playlist: number[] | []
-  playlistCursor: number
-  images: ImageT[]
-}
 
 interface ExifReadResultT {
   GPSLatitude?: number[]
@@ -22,7 +9,7 @@ interface ExifReadResultT {
   GPSLongitudeRef?: 'W' | 'E'
 }
 
-function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
+function useExif(fileData: FileSystemFileEntry) {
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
   const [exifExtracted, setExifExtracted] = useState({})
@@ -33,19 +20,22 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     return EXIF.readFromBinaryFile(arrayBuffer)
   }
 
-  const getGpsFromExif = (exifOverride?): ExifReadResultT => {
-    const exifToAnalyze = exifOverride || exifExtracted
+  const getGpsFromExif = useCallback(
+    (exifOverride?): ExifReadResultT => {
+      const exifToAnalyze = exifOverride || exifExtracted
 
-    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      exifToAnalyze
+      const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
+        exifToAnalyze
 
-    return {
-      GPSLatitude,
-      GPSLatitudeRef,
-      GPSLongitude,
-      GPSLongitudeRef,
-    }
-  }
+      return {
+        GPSLatitude,
+        GPSLatitudeRef,
+        GPSLongitude,
+        GPSLongitudeRef,
+      }
+    },
+    [exifExtracted]
+  )
 
   const getLocationName = async (exifData) => {
     const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
@@ -79,40 +69,37 @@ function useExif({ playlist, playlistCursor, images }: InitialStatesT) {
     return await res.json()
   }
 
-  const updateGeoOnChange = async () => {
-    setIsLoadingGeoNames(true)
-    setExifExtracted({})
-    const imageIndex = playlist[playlistCursor]
-    const imageObj = images[imageIndex]
-    const fileData = imageObj?.fileData
-
-    if (!fileData) {
-      return
-    }
-
-    const exif = await getExifData(fileData)
-    setExifExtracted(exif)
-
-    const extractedGps = getGpsFromExif(exif)
-
-    const isValidGps = Object.values(extractedGps).every((item) => !!item)
-
-    if (!isValidGps) {
-      setCity(null)
-      setCountry(null)
-      setIsLoadingGeoNames(false)
-      return
-    }
-
-    const location = await getLocationName(extractedGps)
-    setCity(location.city)
-    setCountry(location.country)
-    setIsLoadingGeoNames(false)
-  }
-
   useEffect(() => {
+    const updateGeoOnChange = async () => {
+      setIsLoadingGeoNames(true)
+      setExifExtracted({})
+
+      if (!fileData) {
+        return
+      }
+
+      const exif = await getExifData(fileData)
+      setExifExtracted(exif)
+
+      const extractedGps = getGpsFromExif(exif)
+
+      const isValidGps = Object.values(extractedGps).every((item) => !!item)
+
+      if (!isValidGps) {
+        setCity(null)
+        setCountry(null)
+        setIsLoadingGeoNames(false)
+        return
+      }
+
+      const location = await getLocationName(extractedGps)
+      setCity(location.city)
+      setCountry(location.country)
+      setIsLoadingGeoNames(false)
+    }
+
     updateGeoOnChange()
-  }, [playlist, playlistCursor, images])
+  }, [fileData])
 
   return {
     city,
