@@ -1,6 +1,7 @@
 import React, { createContext } from 'react'
 import useExif from '../hooks/useExif'
 import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
+import useMainImage from '../hooks/useMainImage'
 import { Image } from '../types'
 
 type ContextPropsT = {
@@ -38,17 +39,19 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
     playlist,
     playlistCursor,
     thumbnails,
-    mainImage,
-    date,
-    objectFit,
     dateSorting,
     keyDownHandler,
     sort,
     navigate,
     navigateToDate,
-    setObjectFit,
     randomizeSort,
   } = usePlaylist(props.images)
+
+  const { mainImage, date, objectFit, setObjectFit } = useMainImage({
+    playlist,
+    playlistCursor,
+    images: props.images,
+  })
 
   const getCurrentImageFileData = () => {
     const imageIndex = playlist[playlistCursor]
