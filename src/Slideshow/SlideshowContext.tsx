@@ -1,12 +1,13 @@
 import React, { createContext } from 'react'
 import useExif from '../hooks/useExif'
-import usePlaylist, { ImageT, ThumbnailT } from '../hooks/usePlaylist'
+import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
+import { Image } from '../types'
 
 type ContextPropsT = {
-  images: ImageT[]
+  images: Image[]
   handleShuffleClick: (event: any) => void
   thumbnails: ThumbnailT[]
-  currentImage: ImageT
+  currentImage: Image
   handleToggleObjectFit: () => void
   dateSorting: 'asc' | 'desc' | 'random'
   handleSortDate: (override?: string) => void
@@ -28,7 +29,7 @@ type ContextPropsT = {
 export const SlideshowContext = createContext<ContextPropsT>(null)
 
 type ProviderPropsT = {
-  images: ImageT[]
+  images: Image[]
   children: React.ReactNode
 }
 

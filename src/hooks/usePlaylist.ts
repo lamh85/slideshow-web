@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fileNameToMoment } from '../helpers/time'
-
-export interface ImageT {
-  blob: string
-  name: string
-  timeStamp: string
-  fileData: FileSystemFileEntry
-}
+import { Image } from '../types'
 
 const MONTHS_BY_INDEX = [
   null,
@@ -34,7 +28,7 @@ export type ThumbnailT = {
   blob: string
 }
 
-function usePlaylist(images: ImageT[]) {
+function usePlaylist(images: Image[]) {
   const [playlistCursor, setPlaylistCursor] = useState(0)
   // Each number is an index of `images` array
   // image = [{}, {}, {}]
@@ -63,12 +57,6 @@ function usePlaylist(images: ImageT[]) {
         blob: images[imageIndex].blob,
       }
     })
-  }
-
-  const getMainImage = () => {
-    const imageIndex = playlist[playlistCursor]
-
-    return images[imageIndex]
   }
 
   const getDate = () => {
@@ -225,7 +213,6 @@ function usePlaylist(images: ImageT[]) {
     playlist,
     playlistCursor,
     thumbnails: getThumbnails(),
-    mainImage: getMainImage(),
     date: getDate(),
     objectFit,
     dateSorting,
