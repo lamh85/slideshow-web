@@ -34,7 +34,7 @@ export type ThumbnailT = {
   blob: string
 }
 
-function useImagePlayer(images: ImageT[]) {
+function usePlaylist(images: ImageT[]) {
   const [playlistCursor, setPlaylistCursor] = useState(0)
   // Each number is an index of `images` array
   // image = [{}, {}, {}]
@@ -238,4 +238,4 @@ function useImagePlayer(images: ImageT[]) {
   }
 }
 
-export default useImagePlayer
+export default usePlaylist
