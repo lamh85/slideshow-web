@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 import useExif from '../hooks/useExif'
-import useImagePlayer, { ImageT, ThumbnailT } from '../hooks/useImagePlayer'
+import useImagePlayer, { ImageT, ThumbnailT } from '../hooks/usePlaylist'
 
 type ContextPropsT = {
   images: ImageT[]
