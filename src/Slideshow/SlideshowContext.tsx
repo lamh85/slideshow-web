@@ -2,6 +2,7 @@ import React, { createContext } from 'react'
 import useExif from '../hooks/useExif'
 import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
 import useMainImage from '../hooks/useMainImage'
+import useNavigation from '../hooks/useNavigation'
 import { Image } from '../types'
 
 type ContextPropsT = {
@@ -38,12 +39,10 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
   const {
     playlist,
     playlistCursor,
+    setPlaylistCursor,
     thumbnails,
     dateSorting,
-    keyDownHandler,
     sort,
-    navigate,
-    navigateToDate,
     randomizeSort,
   } = usePlaylist(props.images)
 
@@ -61,6 +60,14 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
 
   const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
     useExif(getCurrentImageFileData())
+
+  const { keyDownHandler, navigate, navigateToDate } = useNavigation({
+    playlistCursor,
+    images: props.images,
+    playlist,
+    setPlaylistCursor,
+    dateSorting,
+  })
 
   const getGpsString = () => {
     const isValidGps = Object.values(gpsFromExif).every((item) => !!item)
