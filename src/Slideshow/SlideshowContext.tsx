@@ -1,12 +1,15 @@
 import React, { createContext } from 'react'
 import useExif from '../hooks/useExif'
-import useImagePlayer, { ImageT, ThumbnailT } from '../hooks/useImagePlayer'
+import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
+import useMainImage from '../hooks/useMainImage'
+import useNavigation from '../hooks/useNavigation'
+import { Image } from '../types'
 
 type ContextPropsT = {
-  images: ImageT[]
+  images: Image[]
   handleShuffleClick: (event: any) => void
   thumbnails: ThumbnailT[]
-  currentImage: ImageT
+  currentImage: Image
   handleToggleObjectFit: () => void
   dateSorting: 'asc' | 'desc' | 'random'
   handleSortDate: (override?: string) => void
@@ -28,7 +31,7 @@ type ContextPropsT = {
 export const SlideshowContext = createContext<ContextPropsT>(null)
 
 type ProviderPropsT = {
-  images: ImageT[]
+  images: Image[]
   children: React.ReactNode
 }
 
@@ -36,18 +39,18 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
   const {
     playlist,
     playlistCursor,
+    setPlaylistCursor,
     thumbnails,
-    mainImage,
-    date,
-    objectFit,
     dateSorting,
-    keyDownHandler,
     sort,
-    navigate,
-    navigateToDate,
-    setObjectFit,
     randomizeSort,
-  } = useImagePlayer(props.images)
+  } = usePlaylist(props.images)
+
+  const { mainImage, date, objectFit, setObjectFit } = useMainImage({
+    playlist,
+    playlistCursor,
+    images: props.images,
+  })
 
   const getCurrentImageFileData = () => {
     const imageIndex = playlist[playlistCursor]
@@ -57,6 +60,14 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
 
   const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
     useExif(getCurrentImageFileData())
+
+  const { keyDownHandler, navigate, navigateToDate } = useNavigation({
+    playlistCursor,
+    images: props.images,
+    playlist,
+    setPlaylistCursor,
+    dateSorting,
+  })
 
   const getGpsString = () => {
     const isValidGps = Object.values(gpsFromExif).every((item) => !!item)
