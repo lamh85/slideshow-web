@@ -25,7 +25,6 @@ type ContextPropsT = {
   gpsFromExif: object
   exifExtracted: object
   keyDownHandler: (event: any) => void
-  gpsString: string
 }
 
 export const SlideshowContext = createContext<ContextPropsT>(null)
@@ -69,19 +68,6 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
     dateSorting,
   })
 
-  const getGpsString = () => {
-    const isValidGps = Object.values(gpsFromExif).every((item) => !!item)
-
-    if (!isValidGps) {
-      return ''
-    }
-
-    const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-      exifExtracted
-
-    return `${GPSLatitude[0]}°${GPSLatitude[1]}'${GPSLatitude[2]}"${GPSLatitudeRef} ${GPSLongitude[0]}°${GPSLongitude[1]}'${GPSLongitude[2]}"${GPSLongitudeRef}`
-  }
-
   return (
     <SlideshowContext.Provider
       value={{
@@ -104,7 +90,6 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
         gpsFromExif,
         exifExtracted,
         keyDownHandler,
-        gpsString: getGpsString(),
       }}
     >
       {props.children}
