@@ -5,6 +5,9 @@ import useMainImage from '../hooks/useMainImage'
 import useNavigation from '../hooks/useNavigation'
 import { Image } from '../types'
 
+type Coord_DMS = [D: number, M: number, S: number]
+type Coord_DMS_empty = [D: null, M: null, S: null]
+
 type ContextPropsT = {
   images: Image[]
   handleShuffleClick: (event: any) => void
@@ -23,7 +26,12 @@ type ContextPropsT = {
   objectFit: 'cover' | 'contain'
   date: string
   gpsFromExif: object
-  exifExtracted: object
+  exifExtracted: {
+    GPSLatitude: Coord_DMS | Coord_DMS_empty
+    GPSLatitudeRef: null | 'N' | 'S'
+    GPSLongitude: Coord_DMS | Coord_DMS_empty
+    GPSLongitudeRef: null | 'E' | 'W'
+  }
   keyDownHandler: (event: any) => void
 }
 
