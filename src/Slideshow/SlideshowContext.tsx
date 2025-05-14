@@ -4,9 +4,7 @@ import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
 import useMainImage from '../hooks/useMainImage'
 import useNavigation from '../hooks/useNavigation'
 import { Image } from '../types'
-
-type Coord_DMS = [D: number, M: number, S: number]
-type Coord_DMS_empty = [D: null, M: null, S: null]
+import type { EXIFType } from '../types'
 
 type ContextPropsT = {
   images: Image[]
@@ -26,12 +24,7 @@ type ContextPropsT = {
   objectFit: 'cover' | 'contain'
   date: string
   gpsFromExif: object
-  exifExtracted: {
-    GPSLatitude: Coord_DMS | Coord_DMS_empty
-    GPSLatitudeRef: null | 'N' | 'S'
-    GPSLongitude: Coord_DMS | Coord_DMS_empty
-    GPSLongitudeRef: null | 'E' | 'W'
-  }
+  exifExtracted: EXIFType
   keyDownHandler: (event: any) => void
 }
 

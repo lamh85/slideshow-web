@@ -1,27 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
 import EXIF from 'exif-js'
 import env from 'react-dotenv'
-
-interface ExifReadResultT {
-  GPSLatitude?: number[]
-  GPSLatitudeRef?: 'N' | 'S'
-  GPSLongitude?: number[]
-  GPSLongitudeRef?: 'W' | 'E'
-}
+import type { EXIFType } from '../types'
 
 function useExif(fileData: FileSystemFileEntry) {
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
-  const [exifExtracted, setExifExtracted] = useState({})
+  const [exifExtracted, setExifExtracted] = useState<EXIFType>({})
   const [isLoadingGeoNames, setIsLoadingGeoNames] = useState(false)
 
-  const getExifData = async (file): Promise<ExifReadResultT> => {
+  const getExifData = async (file): Promise<EXIFType> => {
     const arrayBuffer = await file.arrayBuffer()
     return EXIF.readFromBinaryFile(arrayBuffer)
   }
 
   const getGpsFromExif = useCallback(
-    (exifOverride?): ExifReadResultT => {
+    (exifOverride?): EXIFType => {
       const exifToAnalyze = exifOverride || exifExtracted
 
       const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
