@@ -20,6 +20,7 @@ type ContextPropsT = {
   navigateToDate: (date: string) => void
   city: string
   country: string
+  isExifPresent: () => boolean
   isLoadingGeoNames: boolean
   objectFit: 'cover' | 'contain'
   date: string
@@ -58,8 +59,14 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
     return imageObj?.fileData
   }
 
-  const { city, country, gpsFromExif, exifExtracted, isLoadingGeoNames } =
-    useExif(getCurrentImageFileData())
+  const {
+    city,
+    country,
+    gpsFromExif,
+    exifExtracted,
+    isExifPresent,
+    isLoadingGeoNames,
+  } = useExif(getCurrentImageFileData())
 
   const { keyDownHandler, navigate, navigateToDate } = useNavigation({
     playlistCursor,
@@ -85,6 +92,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
         navigateToDate,
         city,
         country,
+        isExifPresent,
         isLoadingGeoNames,
         objectFit,
         date,

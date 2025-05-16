@@ -63,6 +63,12 @@ function useExif(fileData: FileSystemFileEntry) {
     return await res.json()
   }
 
+  const isExifPresent = (exifOverride?): boolean => {
+    const exifToAnalyze = exifOverride || exifExtracted
+
+    return Object.values(exifToAnalyze).every((item) => !!item)
+  }
+
   useEffect(() => {
     const updateGeoOnChange = async () => {
       setIsLoadingGeoNames(true)
@@ -77,9 +83,9 @@ function useExif(fileData: FileSystemFileEntry) {
 
       const extractedGps = getGpsFromExif(exif)
 
-      const isValidGps = Object.values(extractedGps).every((item) => !!item)
+      const isValidExif = isExifPresent(extractedGps)
 
-      if (!isValidGps) {
+      if (!isValidExif) {
         setCity(null)
         setCountry(null)
         setIsLoadingGeoNames(false)
@@ -100,6 +106,7 @@ function useExif(fileData: FileSystemFileEntry) {
     country,
     gpsFromExif: getGpsFromExif(),
     exifExtracted,
+    isExifPresent,
     isLoadingGeoNames,
   }
 }

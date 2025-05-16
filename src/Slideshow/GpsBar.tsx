@@ -2,12 +2,10 @@ import React, { useContext } from 'react'
 import { SlideshowContext } from './SlideshowContext'
 
 export const GpsBar = () => {
-  const { gpsFromExif, exifExtracted } = useContext(SlideshowContext)
+  const { exifExtracted, isExifPresent } = useContext(SlideshowContext)
 
   const gpsString = () => {
-    const isValidGps = Object.values(gpsFromExif).every((item) => !!item)
-
-    if (!isValidGps) {
+    if (!isExifPresent) {
       return ''
     }
 
