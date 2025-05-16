@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import EXIF from 'exif-js'
 import env from 'react-dotenv'
 import type { EXIFType } from '../types'
