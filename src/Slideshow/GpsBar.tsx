@@ -5,7 +5,7 @@ export const GpsBar = () => {
   const { exifExtracted, isExifPresent } = useContext(SlideshowContext)
 
   const gpsString = () => {
-    if (!isExifPresent) {
+    if (!isExifPresent()) {
       return ''
     }
 

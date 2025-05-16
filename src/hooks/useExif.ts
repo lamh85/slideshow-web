@@ -14,23 +14,6 @@ function useExif(fileData: FileSystemFileEntry) {
     return EXIF.readFromBinaryFile(arrayBuffer)
   }
 
-  const getGpsFromExif = useCallback(
-    (exifOverride?): EXIFType => {
-      const exifToAnalyze = exifOverride || exifExtracted
-
-      const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
-        exifToAnalyze
-
-      return {
-        GPSLatitude,
-        GPSLatitudeRef,
-        GPSLongitude,
-        GPSLongitudeRef,
-      }
-    },
-    [exifExtracted]
-  )
-
   const getLocationName = async (exifData) => {
     const { GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef } =
       exifData
@@ -66,7 +49,14 @@ function useExif(fileData: FileSystemFileEntry) {
   const isExifPresent = (exifOverride?): boolean => {
     const exifToAnalyze = exifOverride || exifExtracted
 
-    return Object.values(exifToAnalyze).every((item) => !!item)
+    const gpsKeys = [
+      'GPSLatitude',
+      'GPSLatitudeRef',
+      'GPSLongitude',
+      'GPSLongitudeRef',
+    ]
+
+    return gpsKeys.every((keyName) => !!exifToAnalyze[keyName])
   }
 
   useEffect(() => {
@@ -81,9 +71,7 @@ function useExif(fileData: FileSystemFileEntry) {
       const exif = await getExifData(fileData)
       setExifExtracted(exif)
 
-      const extractedGps = getGpsFromExif(exif)
-
-      const isValidExif = isExifPresent(extractedGps)
+      const isValidExif = isExifPresent(exif)
 
       if (!isValidExif) {
         setCity(null)
@@ -92,7 +80,7 @@ function useExif(fileData: FileSystemFileEntry) {
         return
       }
 
-      const location = await getLocationName(extractedGps)
+      const location = await getLocationName(exif)
       setCity(location.city)
       setCountry(location.country)
       setIsLoadingGeoNames(false)
@@ -104,7 +92,6 @@ function useExif(fileData: FileSystemFileEntry) {
   return {
     city,
     country,
-    gpsFromExif: getGpsFromExif(),
     exifExtracted,
     isExifPresent,
     isLoadingGeoNames,
