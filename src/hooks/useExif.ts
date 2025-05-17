@@ -69,8 +69,6 @@ function useExif(fileData: FileSystemFileEntry) {
       }
 
       const exif = await getExifData(fileData)
-      setExifExtracted(exif)
-
       const isValidExif = isExifPresent(exif)
 
       if (!isValidExif) {
@@ -79,6 +77,16 @@ function useExif(fileData: FileSystemFileEntry) {
         setIsLoadingGeoNames(false)
         return
       }
+
+      const gpsEntries = (({
+        GPSLatitude,
+        GPSLatitudeRef,
+        GPSLongitude,
+        GPSLongitudeRef,
+      }) => ({ GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef }))(
+        exif
+      )
+      setExifExtracted(gpsEntries)
 
       const location = await getLocationName(exif)
       setCity(location.city)
