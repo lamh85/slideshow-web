@@ -1,10 +1,10 @@
 import React, { createContext } from 'react'
-import useExif from '../hooks/useExif'
-import usePlaylist, { ThumbnailT } from '../hooks/usePlaylist'
-import useMainImage from '../hooks/useMainImage'
-import useNavigation from '../hooks/useNavigation'
-import { Image } from '../types'
-import type { EXIFType } from '../types'
+import useExif from './useExif'
+import usePlaylist, { ThumbnailT } from './usePlaylist'
+import useMainImage from './useMainImage'
+import useNavigation from './useNavigation'
+import { Image } from '../../types'
+import type { EXIFType } from '../../types'
 
 type ContextPropsT = {
   images: Image[]
