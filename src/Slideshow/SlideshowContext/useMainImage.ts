@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Image } from '../types'
-import { fileNameToMoment } from '../helpers/time'
+import { Image } from '../../types'
+import { fileNameToMoment } from '../../helpers/time'
 
 const MONTHS_BY_INDEX = [
   null,
