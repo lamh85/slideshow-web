@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import { SlideshowContext } from '../SlideshowContext'
 import { DateForm } from './DateForm'
+import { ButtonsRow } from './ButtonRow'
 
 export const Toolbar = () => {
   const [shouldVisible, setShouldVisible] = useState(true)
@@ -109,72 +110,6 @@ const Location = () => {
         alt={`Flag of ${country}`}
       />
       <div>{city}</div>
-    </div>
-  )
-}
-
-const Button = (props) => {
-  return (
-    <button
-      {...props}
-      style={{
-        fontSize: '20px',
-        height: '40px',
-        padding: '5px',
-        width: '55px',
-      }}
-    >
-      {props.children}
-    </button>
-  )
-}
-
-const ButtonsRow = () => {
-  const {
-    navigateToHome,
-    handleShuffleClick,
-    handleToggleObjectFit,
-    objectFit,
-    handleSortDate,
-    dateSorting,
-    navigateToEnd,
-    currentImage,
-  } = useContext(SlideshowContext)
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-      <Button onClick={navigateToHome}>⏮</Button>
-      <Button onClick={handleShuffleClick}>🔀</Button>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Button style={{ fontSize: '30px' }} onClick={handleToggleObjectFit}>
-          ▣
-        </Button>
-        <div style={{ fontSize: '15px' }}>{objectFit}</div>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Button
-          onClick={() => handleSortDate(dateSorting === 'asc' ? 'desc' : 'asc')}
-        >
-          📅
-        </Button>
-        <div style={{ fontSize: '15px' }}>{dateSorting}</div>
-      </div>
-      <Button onClick={navigateToEnd}>⏭</Button>
-      <Button onClick={() => window.open(currentImage?.blob, '_blank').focus()}>
-        👁
-      </Button>
     </div>
   )
 }
