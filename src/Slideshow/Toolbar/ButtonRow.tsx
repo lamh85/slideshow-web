@@ -18,6 +18,7 @@ export function ButtonsRow() {
     dateSorting,
     navigateToEnd,
     currentImage,
+    toggleGallery,
   } = useContext(SlideshowContext)
 
   const buttonData: ButtonProps[] = [
@@ -46,6 +47,11 @@ export function ButtonsRow() {
     {
       onClick: () => window.open(currentImage?.blob, '_blank').focus(),
       content: '👁',
+    },
+    {
+      onClick: toggleGallery,
+      content: '⋮⋮⋮',
+      style: { fontWeight: 'bold', letterSpacing: '0.1px' },
     },
   ]
 
