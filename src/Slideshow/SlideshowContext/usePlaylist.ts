@@ -9,7 +9,7 @@ export type ThumbnailT = {
 function usePlaylist(images: Image[]) {
   const [playlistCursor, setPlaylistCursor] = useState(0)
   // Each number is an index of `images` array
-  // image = [{}, {}, {}]
+  // images = [{}, {}, {}]
   // playlist = [2, 0, 1]
   const [playlist, setPlaylist] = useState<number[] | []>([])
 
