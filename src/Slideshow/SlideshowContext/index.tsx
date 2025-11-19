@@ -30,8 +30,7 @@ type ProviderPropsT = {
 }
 
 export const SlideshowProvider = (props: ProviderPropsT) => {
-  const { playlist, playlistCursor, setPlaylistCursor, dateSorting, images } =
-    useAppContext()
+  const { playlist, playlistCursor, images } = useAppContext()
 
   const { mainImage, date, objectFit, setObjectFit } = useMainImage({
     playlist,
@@ -48,13 +47,7 @@ export const SlideshowProvider = (props: ProviderPropsT) => {
   const { city, country, exifExtracted, isExifPresent, isLoadingGeoNames } =
     useExif(getCurrentImageFileData())
 
-  const { keyDownHandler, navigate, navigateToDate } = useNavigation({
-    playlistCursor,
-    images,
-    playlist,
-    setPlaylistCursor,
-    dateSorting,
-  })
+  const { keyDownHandler, navigate, navigateToDate } = useNavigation()
 
   return (
     <SlideshowContext.Provider
