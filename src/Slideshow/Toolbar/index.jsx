@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { AppContext } from '../../App'
+import { useAppContext } from '../../App'
 import { SlideshowContext } from '../SlideshowContext'
 import { DateForm } from './DateForm'
 import { ButtonsRow } from './ButtonRow'
@@ -11,7 +11,7 @@ export const Toolbar = () => {
 
   const handleMouseLeave = () => setShouldVisible(false)
 
-  const { thumbnails } = useContext(AppContext)
+  const { thumbnails } = useAppContext()
 
   const { currentImage, navigateToIndex, date } = useContext(SlideshowContext)
 

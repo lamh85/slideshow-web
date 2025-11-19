@@ -1,11 +1,11 @@
 import { useState, useContext } from 'react'
 import { SlideshowContext } from '../SlideshowContext'
-import { AppContext } from '../../App'
+import { useAppContext } from '../../App'
 
 export const DateForm = () => {
   const { navigateToDate } = useContext(SlideshowContext)
 
-  const { images, dateSorting } = useContext(AppContext)
+  const { images, dateSorting } = useAppContext()
 
   const getImageYears = () => {
     const duplicated = images.map((x) => x.timeStamp.split('-')[0])

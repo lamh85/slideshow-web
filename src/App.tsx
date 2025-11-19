@@ -6,8 +6,28 @@ import usePlaylist, { type UsePlaylistResult } from './hooks/usePlaylist'
 import { useGallery, UseGalleryResults } from './hooks/useGallery'
 import { fileNameToMoment } from './helpers/time'
 
+type AppContextT = UsePlaylistResult & UseGalleryResults
+
+const AppContext = createContext<AppContextT>({
+  playlist: [],
+  playlistCursor: 0,
+  setPlaylistCursor: () => {},
+  thumbnails: [],
+  dateSorting: 'asc',
+  sort: () => {},
+  randomizeSort: () => {},
+  images: [],
+  setImages: () => {},
+  showingGallery: false,
+  toggleGallery: () => {},
+})
+
+export const useAppContext = () => {
+  return useContext(AppContext)
+}
+
 const UploadPage = ({ setIsLoadingImages }) => {
-  const { setImages } = useContext(AppContext) // List of blob URLs
+  const { setImages } = useAppContext()
 
   const getTimeStamp = (fileName) => {
     return fileNameToMoment(fileName).toISOString().split('T')[0]
@@ -48,7 +68,7 @@ const UploadPage = ({ setIsLoadingImages }) => {
 
 const AppWithoutProvider = () => {
   const [isLoadingImages, setIsLoadingImages] = useState(true)
-  const { showingGallery } = useContext(AppContext) // List of blob URLs
+  const { showingGallery } = useAppContext()
 
   let currentPage = 'UPLOAD'
   if (showingGallery) {
@@ -67,22 +87,6 @@ const AppWithoutProvider = () => {
     </div>
   )
 }
-
-type AppContextT = UsePlaylistResult & UseGalleryResults
-
-export const AppContext = createContext<AppContextT>({
-  playlist: [],
-  playlistCursor: 0,
-  setPlaylistCursor: () => {},
-  thumbnails: [],
-  dateSorting: 'asc',
-  sort: () => {},
-  randomizeSort: () => {},
-  images: [],
-  setImages: () => {},
-  showingGallery: false,
-  toggleGallery: () => {},
-})
 
 function App() {
   const useGalleryProps = useGallery()

@@ -1,5 +1,5 @@
-import React, { createContext, useContext } from 'react'
-import { AppContext } from '../../App'
+import React, { createContext } from 'react'
+import { useAppContext } from '../../App'
 import useExif from './useExif'
 import useMainImage from './useMainImage'
 import useNavigation from './useNavigation'
@@ -31,7 +31,7 @@ type ProviderPropsT = {
 
 export const SlideshowProvider = (props: ProviderPropsT) => {
   const { playlist, playlistCursor, setPlaylistCursor, dateSorting, images } =
-    useContext(AppContext)
+    useAppContext()
 
   const { mainImage, date, objectFit, setObjectFit } = useMainImage({
     playlist,

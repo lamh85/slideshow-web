@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../../App'
+import { useAppContext } from '../../App'
 import { SlideshowContext } from '../SlideshowContext'
 
 type ButtonProps = {
@@ -18,8 +18,7 @@ export function ButtonsRow() {
     currentImage,
   } = useContext(SlideshowContext)
 
-  const { randomizeSort, sort, dateSorting, toggleGallery } =
-    useContext(AppContext)
+  const { randomizeSort, sort, dateSorting, toggleGallery } = useAppContext()
 
   const buttonData: ButtonProps[] = [
     {

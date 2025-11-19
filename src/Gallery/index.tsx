@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { AppContext } from '../App'
+import React from 'react'
+import { useAppContext } from '../App'
 
 export function Gallery() {
-  const { toggleGallery } = useContext(AppContext)
+  const { toggleGallery } = useAppContext()
 
   return (
     <div>
