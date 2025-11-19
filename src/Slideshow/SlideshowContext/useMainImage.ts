@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Image } from '../../types'
 import { fileNameToMoment } from '../../helpers/time'
+import { useAppContext } from '../../App'
 
 const MONTHS_BY_INDEX = [
   null,
@@ -18,14 +19,8 @@ const MONTHS_BY_INDEX = [
   'December',
 ]
 
-type Options = {
-  playlist: number[]
-  playlistCursor: number
-  images: Image[]
-}
-
-const useMainImage = (options: Options) => {
-  const { playlist, playlistCursor, images } = options
+const useMainImage = () => {
+  const { playlist, playlistCursor, images } = useAppContext()
   const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover')
 
   const getMainImage = () => {

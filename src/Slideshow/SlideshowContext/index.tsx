@@ -32,11 +32,7 @@ type ProviderPropsT = {
 export const SlideshowProvider = (props: ProviderPropsT) => {
   const { playlist, playlistCursor, images } = useAppContext()
 
-  const { mainImage, date, objectFit, setObjectFit } = useMainImage({
-    playlist,
-    playlistCursor,
-    images,
-  })
+  const { mainImage, date, objectFit, setObjectFit } = useMainImage()
 
   const getCurrentImageFileData = () => {
     const imageIndex = playlist[playlistCursor]
