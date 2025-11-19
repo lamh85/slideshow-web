@@ -34,7 +34,7 @@ const useNavigation = (options: Options) => {
     if (args.increment) {
       incrementPlaylistCursor(args.increment)
       return
-    } else if (args.index) {
+    } else if (typeof args.index === 'number') {
       setPlaylistCursor(args.index)
     }
   }
