@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { Image } from '../types'
 
 export type ThumbnailT = {
@@ -6,12 +6,27 @@ export type ThumbnailT = {
   blob: string
 }
 
-function usePlaylist(images: Image[]) {
+type DateSortOptions = 'asc' | 'desc' | 'random'
+type Playlist = number[]
+
+export type UsePlaylistResult = {
+  playlist: Playlist
+  playlistCursor: number
+  setPlaylistCursor: Dispatch<SetStateAction<number>>
+  thumbnails: ThumbnailT[]
+  dateSorting: DateSortOptions
+  sort: (override?: DateSortOptions) => void
+  randomizeSort: (_event: any) => void
+  images: Image[]
+  setImages: Dispatch<SetStateAction<Image[]>>
+}
+
+function usePlaylist(): UsePlaylistResult {
   const [playlistCursor, setPlaylistCursor] = useState(0)
   // Each number is an index of `images` array
-  // images = [{}, {}, {}]
   // playlist = [2, 0, 1]
-  const [playlist, setPlaylist] = useState<number[] | []>([])
+  const [playlist, setPlaylist] = useState<Playlist>([])
+  const [images, setImages] = useState<Image[]>([])
 
   const [dateSorting, setDateSorting] = useState<'asc' | 'desc' | 'random'>(
     'asc'
@@ -83,7 +98,7 @@ function usePlaylist(images: Image[]) {
 
   useEffect(() => {
     handleSortDate('asc')
-  }, [])
+  }, [images])
 
   return {
     playlist,
@@ -93,6 +108,8 @@ function usePlaylist(images: Image[]) {
     dateSorting,
     sort: handleSortDate,
     randomizeSort: handleShuffleClick,
+    images,
+    setImages,
   }
 }
 
