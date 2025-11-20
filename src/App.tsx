@@ -20,6 +20,7 @@ const AppContext = createContext<AppContextT>({
   setImages: () => {},
   showingGallery: false,
   toggleGallery: () => {},
+  galleryImages: [],
 })
 
 export const useAppContext = () => {

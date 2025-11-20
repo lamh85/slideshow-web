@@ -19,6 +19,7 @@ export type UsePlaylistResult = {
   randomizeSort: (_event: any) => void
   images: Image[]
   setImages: Dispatch<SetStateAction<Image[]>>
+  galleryImages: Image[]
 }
 
 function usePlaylist(): UsePlaylistResult {
@@ -96,6 +97,8 @@ function usePlaylist(): UsePlaylistResult {
     setDateSorting('random')
   }
 
+  const galleryImages = playlist.map((imageIndex) => images[imageIndex])
+
   useEffect(() => {
     handleSortDate('asc')
   }, [images])
@@ -110,6 +113,7 @@ function usePlaylist(): UsePlaylistResult {
     randomizeSort: handleShuffleClick,
     images,
     setImages,
+    galleryImages,
   }
 }
 
