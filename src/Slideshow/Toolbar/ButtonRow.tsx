@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useAppContext } from '../../App'
 import { SlideshowContext } from '../SlideshowContext'
 
 type ButtonProps = {
@@ -11,14 +12,13 @@ type ButtonProps = {
 export function ButtonsRow() {
   const {
     navigateToHome,
-    handleShuffleClick,
     handleToggleObjectFit,
     objectFit,
-    handleSortDate,
-    dateSorting,
     navigateToEnd,
     currentImage,
   } = useContext(SlideshowContext)
+
+  const { randomizeSort, sort, dateSorting, toggleGallery } = useAppContext()
 
   const buttonData: ButtonProps[] = [
     {
@@ -26,7 +26,7 @@ export function ButtonsRow() {
       content: '⏮',
     },
     {
-      onClick: handleShuffleClick,
+      onClick: randomizeSort,
       content: '🔀',
     },
     {
@@ -35,7 +35,7 @@ export function ButtonsRow() {
       caption: objectFit,
     },
     {
-      onClick: () => handleSortDate(dateSorting === 'asc' ? 'desc' : 'asc'),
+      onClick: () => sort(dateSorting === 'asc' ? 'desc' : 'asc'),
       content: '📅',
       caption: dateSorting,
     },
@@ -46,6 +46,11 @@ export function ButtonsRow() {
     {
       onClick: () => window.open(currentImage?.blob, '_blank').focus(),
       content: '👁',
+    },
+    {
+      onClick: toggleGallery,
+      content: '⋮⋮⋮',
+      style: { fontWeight: 'bold', letterSpacing: '0.1px' },
     },
   ]
 

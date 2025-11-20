@@ -1,22 +1,14 @@
 import { useEffect } from 'react'
-import { Image } from '../types'
-
-interface Options {
-  playlistCursor: number
-  images: Image[]
-  playlist: number[]
-  setPlaylistCursor: (number) => void
-  dateSorting: 'asc' | 'desc' | 'random'
-}
+import { useAppContext } from '../../App'
 
 type NavigateArgsT = {
   increment: number
   index: number
 }
 
-const useNavigation = (options: Options) => {
+const useNavigation = () => {
   const { images, playlistCursor, playlist, setPlaylistCursor, dateSorting } =
-    options
+    useAppContext()
 
   const incrementPlaylistCursor = (increment: number) => {
     const maxPosition = images.length - 1

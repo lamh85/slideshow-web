@@ -1,19 +1,14 @@
 import React, { createContext } from 'react'
+import { useAppContext } from '../../App'
 import useExif from './useExif'
-import usePlaylist, { ThumbnailT } from './usePlaylist'
 import useMainImage from './useMainImage'
 import useNavigation from './useNavigation'
 import { Image } from '../../types'
 import type { EXIFType } from '../../types'
 
 type ContextPropsT = {
-  images: Image[]
-  handleShuffleClick: (event: any) => void
-  thumbnails: ThumbnailT[]
   currentImage: Image
   handleToggleObjectFit: () => void
-  dateSorting: 'asc' | 'desc' | 'random'
-  handleSortDate: (override?: string) => void
   navigateToHome: () => void
   navigateToEnd: () => void
   navigateToIndex: (index: number) => void
@@ -31,56 +26,32 @@ type ContextPropsT = {
 export const SlideshowContext = createContext<ContextPropsT>(null)
 
 type ProviderPropsT = {
-  images: Image[]
   children: React.ReactNode
 }
 
 export const SlideshowProvider = (props: ProviderPropsT) => {
-  const {
-    playlist,
-    playlistCursor,
-    setPlaylistCursor,
-    thumbnails,
-    dateSorting,
-    sort,
-    randomizeSort,
-  } = usePlaylist(props.images)
+  const { playlist, playlistCursor, images } = useAppContext()
 
-  const { mainImage, date, objectFit, setObjectFit } = useMainImage({
-    playlist,
-    playlistCursor,
-    images: props.images,
-  })
+  const { mainImage, date, objectFit, setObjectFit } = useMainImage()
 
   const getCurrentImageFileData = () => {
     const imageIndex = playlist[playlistCursor]
-    const imageObj = props.images[imageIndex]
+    const imageObj = images[imageIndex]
     return imageObj?.fileData
   }
 
   const { city, country, exifExtracted, isExifPresent, isLoadingGeoNames } =
     useExif(getCurrentImageFileData())
 
-  const { keyDownHandler, navigate, navigateToDate } = useNavigation({
-    playlistCursor,
-    images: props.images,
-    playlist,
-    setPlaylistCursor,
-    dateSorting,
-  })
+  const { keyDownHandler, navigate, navigateToDate } = useNavigation()
 
   return (
     <SlideshowContext.Provider
       value={{
-        images: props.images,
-        handleShuffleClick: randomizeSort,
-        thumbnails,
         currentImage: mainImage,
         handleToggleObjectFit: setObjectFit,
-        dateSorting: dateSorting,
-        handleSortDate: sort,
         navigateToHome: () => navigate({ index: 0 }),
-        navigateToEnd: () => navigate({ index: props.images.length - 1 }),
+        navigateToEnd: () => navigate({ index: images.length - 1 }),
         navigateToIndex: (index) => navigate({ index }),
         navigateToDate,
         city,
