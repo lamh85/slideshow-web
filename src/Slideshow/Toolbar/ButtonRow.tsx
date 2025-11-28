@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useAppContext } from '../../App'
-import { SlideshowContext } from '../SlideshowContext'
+import { useSlideshowContext } from '../SlideshowContext'
 
 type ButtonProps = {
   onClick: (event?) => void
@@ -16,7 +16,7 @@ export function ButtonsRow() {
     objectFit,
     navigateToEnd,
     currentImage,
-  } = useContext(SlideshowContext)
+  } = useSlideshowContext()
 
   const { randomizeSort, sort, dateSorting, toggleGallery } = useAppContext()
 

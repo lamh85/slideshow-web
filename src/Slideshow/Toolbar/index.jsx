@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { useAppContext } from '../../App'
-import { SlideshowContext } from '../SlideshowContext'
+import { useSlideshowContext } from '../SlideshowContext'
 import { DateForm } from './DateForm'
 import { ButtonsRow } from './ButtonRow'
 
@@ -13,7 +13,7 @@ export const Toolbar = () => {
 
   const { thumbnails } = useAppContext()
 
-  const { currentImage, navigateToIndex, date } = useContext(SlideshowContext)
+  const { currentImage, navigateToIndex, date } = useSlideshowContext()
 
   return (
     <div
@@ -84,7 +84,7 @@ export const Toolbar = () => {
 }
 
 const Location = () => {
-  const { city, country, isLoadingGeoNames } = useContext(SlideshowContext)
+  const { city, country, isLoadingGeoNames } = useSlideshowContext()
 
   if (isLoadingGeoNames) {
     return <div>Loading city and country...</div>

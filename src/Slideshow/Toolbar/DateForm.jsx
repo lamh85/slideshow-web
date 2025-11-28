@@ -1,9 +1,9 @@
-import { useState, useContext } from 'react'
-import { SlideshowContext } from '../SlideshowContext'
+import { useState } from 'react'
+import { useSlideshowContext } from '../SlideshowContext'
 import { useAppContext } from '../../App'
 
 export const DateForm = () => {
-  const { navigateToDate } = useContext(SlideshowContext)
+  const { navigateToDate } = useSlideshowContext()
 
   const { images, dateSorting } = useAppContext()
 

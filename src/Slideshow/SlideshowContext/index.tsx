@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { useAppContext } from '../../App'
 import useExif from './useExif'
 import useMainImage from './useMainImage'
@@ -23,7 +23,9 @@ type ContextPropsT = {
   keyDownHandler: (event: any) => void
 }
 
-export const SlideshowContext = createContext<ContextPropsT>(null)
+const SlideshowContext = createContext<ContextPropsT>(null)
+
+export const useSlideshowContext = () => useContext(SlideshowContext)
 
 type ProviderPropsT = {
   children: React.ReactNode

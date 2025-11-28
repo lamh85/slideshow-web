@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { SlideshowContext } from './SlideshowContext'
+import React from 'react'
+import { useSlideshowContext } from './SlideshowContext'
 
 export const MainImage = () => {
-  const { currentImage, objectFit, keyDownHandler } = useContext(SlideshowContext)
+  const { currentImage, objectFit, keyDownHandler } = useSlideshowContext()
 
   return (
     <img

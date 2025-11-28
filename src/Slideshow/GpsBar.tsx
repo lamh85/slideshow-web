@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
-import { SlideshowContext } from './SlideshowContext'
+import React from 'react'
+import { useSlideshowContext } from './SlideshowContext'
 
 export const GpsBar = () => {
-  const { exifExtracted, isExifPresent } = useContext(SlideshowContext)
+  const { exifExtracted, isExifPresent } = useSlideshowContext()
 
   const gpsString = () => {
     if (!isExifPresent()) {
