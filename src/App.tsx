@@ -2,26 +2,11 @@ import React, { createContext, useContext, useState } from 'react'
 import './App.css'
 import Slideshow from './Slideshow'
 import { Gallery } from './Gallery'
-import usePlaylist, { type UsePlaylistResult } from './hooks/usePlaylist'
-import { useGallery, UseGalleryResults } from './hooks/useGallery'
+import usePlaylist from './hooks/usePlaylist'
+import { useGallery } from './hooks/useGallery'
 import { fileNameToMoment } from './helpers/time'
 
-type AppContextT = UsePlaylistResult & UseGalleryResults
-
-const AppContext = createContext<AppContextT>({
-  playlist: [],
-  playlistCursor: 0,
-  setPlaylistCursor: () => {},
-  thumbnails: [],
-  dateSorting: 'asc',
-  sort: () => {},
-  randomizeSort: () => {},
-  images: [],
-  setImages: () => {},
-  showingGallery: false,
-  toggleGallery: () => {},
-  galleryImages: [],
-})
+const AppContext = createContext(null)
 
 export const useAppContext = () => {
   return useContext(AppContext)

@@ -9,7 +9,7 @@ export type ThumbnailT = {
 type DateSortOptions = 'asc' | 'desc' | 'random'
 type Playlist = number[]
 
-export type UsePlaylistResult = {
+type UsePlaylistResult = {
   playlist: Playlist
   playlistCursor: number
   setPlaylistCursor: Dispatch<SetStateAction<number>>

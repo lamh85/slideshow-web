@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export type UseGalleryResults = {
+type UseGalleryResults = {
   showingGallery: boolean
   toggleGallery: () => void
 }
