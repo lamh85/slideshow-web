@@ -20,6 +20,8 @@ type UsePlaylistResult = {
   images: Image[]
   setImages: Dispatch<SetStateAction<Image[]>>
   galleryImages: Image[]
+  isLoadingImages: boolean
+  setIsLoadingImages: Dispatch<SetStateAction<boolean>>
 }
 
 function usePlaylist(): UsePlaylistResult {
@@ -28,6 +30,7 @@ function usePlaylist(): UsePlaylistResult {
   // playlist = [2, 0, 1]
   const [playlist, setPlaylist] = useState<Playlist>([])
   const [images, setImages] = useState<Image[]>([])
+  const [isLoadingImages, setIsLoadingImages] = useState(true)
 
   const [dateSorting, setDateSorting] = useState<'asc' | 'desc' | 'random'>(
     'asc'
@@ -114,6 +117,8 @@ function usePlaylist(): UsePlaylistResult {
     images,
     setImages,
     galleryImages,
+    isLoadingImages,
+    setIsLoadingImages,
   }
 }
 
