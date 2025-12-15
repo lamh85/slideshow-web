@@ -1,11 +1,21 @@
 import React from 'react'
+import {
+  FaBackwardFast,
+  FaShuffle,
+  FaArrowsUpDown,
+  FaClock,
+  FaForwardFast,
+  FaMaximize,
+  FaTableCells,
+} from 'react-icons/fa6'
+import { type IconType } from 'react-icons'
 import { useAppContext } from '../../App'
 import { useSlideshowContext } from '../SlideshowContext'
 
 type ButtonProps = {
   onClick: (event?) => void
   style?: object
-  content: React.ReactNode
+  icon: IconType
   caption?: string
 }
 
@@ -23,33 +33,33 @@ export function ButtonsRow() {
   const buttonData: ButtonProps[] = [
     {
       onClick: navigateToHome,
-      content: '⏮',
+      icon: FaBackwardFast,
     },
     {
       onClick: randomizeSort,
-      content: '🔀',
+      icon: FaShuffle,
     },
     {
       onClick: handleToggleObjectFit,
-      content: '▣',
+      icon: FaArrowsUpDown,
       caption: objectFit,
     },
     {
       onClick: () => sort(dateSorting === 'asc' ? 'desc' : 'asc'),
-      content: '📅',
+      icon: FaClock,
       caption: dateSorting,
     },
     {
       onClick: navigateToEnd,
-      content: '⏭',
+      icon: FaForwardFast,
     },
     {
       onClick: () => window.open(currentImage?.blob, '_blank').focus(),
-      content: '👁',
+      icon: FaMaximize,
     },
     {
       onClick: toggleGallery,
-      content: '⋮⋮⋮',
+      icon: FaTableCells,
       style: { fontWeight: 'bold', letterSpacing: '0.1px' },
     },
   ]
@@ -61,9 +71,9 @@ export function ButtonsRow() {
           key={index}
           onClick={item.onClick}
           style={item.style}
-          content={item.content}
           caption={item.caption}
-        />
+          icon={item.icon}
+        ></Button>
       ))}
     </div>
   )
@@ -72,7 +82,7 @@ export function ButtonsRow() {
 function Button({
   onClick = () => {},
   style = {},
-  content,
+  icon,
   caption,
 }: ButtonProps) {
   return (
@@ -93,7 +103,7 @@ function Button({
           ...style,
         }}
       >
-        {content}
+        {icon({})}
       </button>
       <div style={{ fontSize: '15px' }}>{caption}</div>
     </div>
