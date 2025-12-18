@@ -100,6 +100,7 @@ function Button({
           height: '40px',
           padding: '5px',
           width: '55px',
+          cursor: 'pointer',
           ...style,
         }}
       >
