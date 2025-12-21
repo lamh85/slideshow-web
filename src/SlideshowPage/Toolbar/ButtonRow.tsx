@@ -64,7 +64,7 @@ export function ButtonsRow() {
   ]
 
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1px' }}>
       {buttonData.map((item, index) => (
         <Button
           key={index}
@@ -100,6 +100,10 @@ function Button({
           padding: '5px',
           width: '55px',
           cursor: 'pointer',
+          background: 'black',
+          color: 'white',
+          border: 'none',
+          borderRadius: 5,
           ...style,
         }}
       >
