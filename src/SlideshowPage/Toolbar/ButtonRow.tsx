@@ -8,14 +8,13 @@ import {
   FaMaximize,
   FaTableCells,
 } from 'react-icons/fa6'
-import { type IconType } from 'react-icons'
 import { useAppContext } from '../../App'
 import { useSlideshowContext } from '../SlideshowContext'
 
 type ButtonProps = {
   onClick: (event?) => void
   style?: object
-  icon: IconType
+  icon: React.ReactNode
   caption?: string
 }
 
@@ -33,33 +32,33 @@ export function ButtonsRow() {
   const buttonData: ButtonProps[] = [
     {
       onClick: navigateToHome,
-      icon: FaBackwardFast,
+      icon: FaBackwardFast({}),
     },
     {
       onClick: randomizeSort,
-      icon: FaShuffle,
+      icon: FaShuffle({}),
     },
     {
       onClick: handleToggleObjectFit,
-      icon: FaArrowsUpDown,
+      icon: FaArrowsUpDown({}),
       caption: objectFit,
     },
     {
       onClick: () => sort(dateSorting === 'asc' ? 'desc' : 'asc'),
-      icon: FaClock,
+      icon: FaClock({}),
       caption: dateSorting,
     },
     {
       onClick: navigateToEnd,
-      icon: FaForwardFast,
+      icon: FaForwardFast({}),
     },
     {
       onClick: () => window.open(currentImage?.blob, '_blank').focus(),
-      icon: FaMaximize,
+      icon: FaMaximize({}),
     },
     {
       onClick: toggleGallery,
-      icon: FaTableCells,
+      icon: FaTableCells({}),
       style: { fontWeight: 'bold', letterSpacing: '0.1px' },
     },
   ]
@@ -104,7 +103,7 @@ function Button({
           ...style,
         }}
       >
-        {icon({})}
+        {icon}
       </button>
       <div style={{ fontSize: '15px' }}>{caption}</div>
     </div>
