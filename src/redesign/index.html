@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <script src="https://kit.fontawesome.com/a4bddce8fc.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row top">
+        <div class="image-info">
+          <div class="location">
+            <span class="name">Brussels</span>
+            <img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_Belgium_%28civil%29.svg/330px-Flag_of_Belgium_%28civil%29.svg.png" />
+          </div>
+          <div class="date">
+            28 August 2022
+          </div>
+        </div>
+        <div class="current-image-controls">
+          <i class="fa-solid fa-crop-simple"></i>
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </div>
+      </div>
+      <div class="row bottom">
+        <div class="playlist-editor">
+          <i class="fa-solid fa-shuffle"></i>
+          <i class="fa-solid fa-arrow-down-1-9"></i>
+        </div>
+
+        <!-- <div class="thumbnails"> -->
+        <!-- </div> -->
+
+        <div class="navigation">
+          <i class="fa-solid fa-table-cells"></i>
+          <i class="fa-regular fa-calendar"></i>
+          <img class="thumbnail" src="./thumbnail1.jpg" />
+          <img class="thumbnail" src="./thumbnail2.jpg" />
+          <img class="thumbnail" src="./background.jpg" />
+          <img class="thumbnail" src="./thumbnail4.jpg" />
+          <img class="thumbnail" src="./thumbnail5.jpg" />
+          <i class="fa-solid fa-backward-step"></i>
+          <i class="fa-solid fa-chevron-left"></i>
+          <i class="fa-solid fa-chevron-right"></i>
+          <i class="fa-solid fa-forward-step"></i>
+        </div>
+      </div>
+    </div>
+  </body>
+  <style>
+    :root {
+      --font-color: white;
+      --space-atomic: 1rem;
+      --background-transparent: rgb(0 0 0 / 50%);
+        /* Computed */
+      --size-icon: calc(var(--space-atomic) * 1.5);
+      --padding-body: var(--space-atomic);
+      --margin-reclaim: calc(var(--padding-body) * -0.5);
+    }
+
+    body {
+        font-family: Calibri, Verdana, Candara, sans-serif;
+        margin: 0;
+        height: 100vh;
+        background-image: url('./background.jpg');
+        background-size: cover;
+        background-position-x: center;
+        background-position-y: center;
+    }
+
+    .container {
+        padding: var(--padding-body);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .row.top {
+      align-items: flex-start;
+    }
+
+    /* Transparent-background boxes */
+    .image-info, .current-image-controls, .playlist-editor, .navigation {
+      background-color: var(--background-transparent);
+      border-radius: calc(var(--space-atomic) * 0.5);
+      padding: var(--space-atomic);
+      margin: var(--margin-reclaim)
+    }
+
+    .image-info {
+      color: white;
+    }
+
+    .location {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .location .name {
+      font-size: calc(var(--space-atomic) * 4);
+      margin-right: var(--space-atomic);
+    }
+
+    .location .flag {
+      height: var(--space-atomic);
+    }
+
+    i[class*="fa-"] {
+      color: var(--font-color);
+      font-size: var(--size-icon);
+    }
+
+    .current-image-controls, .playlist-editor, .navigation {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-atomic);
+    }
+
+    .thumbnails {
+      display: flex;
+      flex-direction: row;
+      gap: var(--space-atomic);
+    }
+
+    .thumbnail {
+      height: var(--size-icon);
+    }
+  </style>
+</html>
