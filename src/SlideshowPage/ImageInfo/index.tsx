@@ -1,14 +1,26 @@
 import React from 'react'
+import { useSlideshowContext } from '../SlideshowContext'
 
 export function ImageInfo() {
+  const { city, country, date, isLoadingGeoNames } = useSlideshowContext()
+
+  if (isLoadingGeoNames) {
+    return (
+      <div className="image-info loading-location">
+        <div className="date">{date}</div>
+      </div>
+    )
+  }
+
   return (
     <div className="image-info">
-      <div className="city-name">Brussels</div>
+      <div className="city-name">{city}</div>
       <img
         className="flag"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_Belgium_%28civil%29.svg/330px-Flag_of_Belgium_%28civil%29.svg.png"
+        src={`https://flagcdn.com/${country.toLowerCase()}.svg`}
+        alt={`Flag of ${country}`}
       />
-      <div className="date">28 August 2022</div>
+      <div className="date">{date}</div>
     </div>
   )
 }
