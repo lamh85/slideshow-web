@@ -1,3 +1,13 @@
+:root {
+  --font-color: white;
+  --space-atomic: 1rem;
+  --background-transparent: rgb(0 0 0 / 50%);
+  /* Computed */
+  --size-icon: calc(var(--space-atomic) * 1.5);
+  --padding-body: var(--space-atomic);
+  --margin-reclaim: calc(var(--padding-body) * -0.5);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

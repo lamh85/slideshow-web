@@ -1,0 +1,25 @@
+.imageInfo {
+  background-color: var(--background-transparent);
+  border-radius: calc(var(--space-atomic) * 0.5);
+  padding: var(--space-atomic);
+  margin: var(--margin-reclaim);
+  color: var(--font-color);
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--space-atomic);
+  --font-small: var(--space-atomic);
+}
+
+.cityName,
+.imageInfo.loadingLocation .date {
+  font-size: calc(var(--size-icon) * 2);
+}
+
+.flag {
+  height: var(--font-small);
+}
+
+.date {
+  font-size: var(--font-small);
+}
