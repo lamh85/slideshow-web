@@ -70,48 +70,9 @@ export const Toolbar = () => {
           alignItems: 'center',
         }}
       >
-        <div
-          style={{ fontSize: '20px', marginRight: '5px', whiteSpace: 'nowrap' }}
-        >
-          <div>{date}</div>
-          <Location />
-        </div>
         <ButtonsRow />
         <DateForm />
       </div>
-    </div>
-  )
-}
-
-const Location = () => {
-  const { city, country, isLoadingGeoNames } = useSlideshowContext()
-
-  if (isLoadingGeoNames) {
-    return <div>Loading city and country...</div>
-  }
-
-  if (!city || !country || city.length === 0 || country.length === 0) {
-    return <div>No location data found.</div>
-  }
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <img
-        src={`https://flagcdn.com/${country.toLowerCase()}.svg`}
-        style={{
-          height: '1em',
-          marginRight: '5px',
-          border: '1px solid lightgrey',
-          borderRadius: '3px',
-        }}
-        alt={`Flag of ${country}`}
-      />
-      <div>{city}</div>
     </div>
   )
 }

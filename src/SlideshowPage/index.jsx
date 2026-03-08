@@ -2,11 +2,12 @@ import { Toolbar } from './Toolbar'
 import { SlideshowProvider } from './SlideshowContext'
 import { GpsBar } from './GpsBar'
 import { MainImage } from './MainImage'
+import styles from './Slideshowpage.module.css'
 
 const Slideshow = () => {
   return (
     <SlideshowProvider>
-      <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <div className={styles.container}>
         <MainImage />
         <Toolbar />
         <GpsBar />
