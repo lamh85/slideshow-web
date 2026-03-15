@@ -1,0 +1,1 @@
+Each file should return all the props needed for the page in question.
