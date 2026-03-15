@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Answer: Chrome directory permission prompt in React / File System Access API</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f8f9fa;
+      color: #222;
+    }
+    h1, h2, h3 {
+      color: #1a1a1a;
+    }
+    .box {
+      background: white;
+      border-radius: 10px;
+      padding: 24px 32px;
+      margin: 24px 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #0066cc;
+    }
+    .important {
+      border-left-color: #e63946;
+      background: #fff5f5;
+    }
+    code {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background: #f1f3f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #d6336c;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #e6e6e6;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.95em;
+    }
+    .answer {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #006600;
+      margin: 1.5em 0;
+    }
+    .current-date-note {
+      color: #555;
+      font-size: 0.9em;
+      margin-top: 2em;
+      border-top: 1px solid #ddd;
+      padding-top: 1em;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Chrome “Are you sure you want to allow this site to access your files?” prompt</h1>
+
+<div class="box">
+  <h2>Short answer</h2>
+  <p class="answer">No — you cannot reliably bypass or suppress this security confirmation dialog in Chrome when using <code>window.showDirectoryPicker()</code>.</p>
+  <p>It is a deliberate <strong>one-time user consent</strong> dialog for top-level <strong>FileSystemDirectoryHandle</strong> access.</p>
+</div>
+
+<div class="box important">
+  <h2>Why the dialog appears (and why it stays)</h2>
+
+  <ul>
+    <li>The <strong>File System Access API</strong> is powerful: it allows persistent read/write access to a whole directory (even after page reload / browser restart if you store the handle).</li>
+    <li>Chrome (and most other browsers) <strong>require explicit user confirmation</strong> the <strong>first time</strong> a site calls <code>showDirectoryPicker()</code>.</li>
+    <li>This is a <strong>top-level permission gate</strong> — similar in spirit to camera/microphone/location permissions.</li>
+    <li>Even if you already have permission to a subdirectory, calling <code>showDirectoryPicker()</code> again usually triggers the dialog again.</li>
+  </ul>
+
+  <p><strong>Bottom line</strong>: the dialog is <u>intentional security UX</u>. There is no standard flag, origin trial, or permission policy that removes it as of March 2026.</p>
+</div>
+
+<div class="box">
+  <h2>What you <em>can</em> do to improve the experience</h2>
+
+  <ol>
+    <li><strong>Call <code>showDirectoryPicker()</code> only once</strong> and <strong>persist the handle</strong> using <code>IndexedDB</code> or <code>localStorage</code> + <code>handle.requestPermission()</code></li>
+    <li>Show nice instructions <strong>before</strong> you trigger the picker</li>
+    <li>After getting the directory handle, verify / request permission again only when needed (usually does <em>not</em> show the scary dialog if already granted)</li>
+  </ol>
+
+  <h3>Recommended pattern 2025–2026</h3>
+
+<pre><code>// 1. Try to restore previously used folder
+async function getPersistedDirectoryHandle() {
+  const db = await openDB(); // your IndexedDB wrapper
+  const savedHandle = await db.get('directoryHandles', 'user-folder');
+  if (!savedHandle) return null;
+
+  // Very important: check & possibly re-grant permission
+  if ((await savedHandle.queryPermission({mode: 'read'})) === 'granted' ||
+      (await savedHandle.requestPermission({mode: 'read'})) === 'granted') {
+    return savedHandle;
+  }
+  return null;
+}
+
+// 2. Main slideshow start logic
+async function startSlideshow() {
+  let dirHandle = await getPersistedDirectoryHandle();
+
+  if (!dirHandle) {
+    // This is the call that shows the big confirmation dialog (first time)
+    try {
+      dirHandle = await window.showDirectoryPicker({
+        mode: 'read',                 // or 'readwrite' if you need to write
+        startIn: 'pictures',          // optional hint
+        multiple: false
+      });
+
+      // Save for next time
+      const db = await openDB();
+      await db.put('directoryHandles', dirHandle, 'user-folder');
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        alert("Folder selection cancelled.");
+      }
+      return;
+    }
+  }
+
+  // Now you can use dirHandle without showing dialog again (most cases)
+  showSlideshow(dirHandle);
+}
+</code></pre>
+
+  <p><strong>Key point</strong>: After the user has granted permission once and you stored the handle, <strong>most subsequent calls to <code>requestPermission()</code></strong> will <strong>not</strong> trigger the big “Are you sure?” dialog — only a small permission sheet (if anything).</p>
+</div>
+
+<div class="box">
+  <h2>Alternatives that avoid the dialog completely</h2>
+
+  <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+    <tr style="background:#eee;">
+      <th style="padding:12px; text-align:left;">Method</th>
+      <th style="padding:12px; text-align:left;">Shows big dialog?</th>
+      <th style="padding:12px; text-align:left;">Persistent access?</th>
+      <th style="padding:12px; text-align:left;">Notes</th>
+    </tr>
+    <tr>
+      <td><code>input type="file" webkitdirectory</code></td>
+      <td>No</td>
+      <td>No</td>
+      <td>One-time selection, cannot save handle, user must pick again every visit</td>
+    </tr>
+    <tr>
+      <td>Drag & drop folder</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Same limitation as above</td>
+    </tr>
+    <tr>
+      <td><code>showDirectoryPicker()</code></td>
+      <td>Yes (first time)</td>
+      <td>Yes (if you store handle)</td>
+      <td>Best UX long-term — this is what you should use</td>
+    </tr>
+  </table>
+</div>
+
+<div class="box">
+  <h2>Summary — What should you do?</h2>
+
+  <div style="font-size:1.15em; margin:1.4em 0;">
+    <strong>Use <code>showDirectoryPicker()</code> + persist the handle in IndexedDB</strong><br>
+    → The scary dialog appears **only once** (or very rarely).<br>
+    → After that your slideshow can start instantly on future visits.
+  </div>
+
+  <p>That is still — by far — the best user experience possible in 2026 for a local-folder-based slideshow in the browser.</p>
+</div>
+
+<div class="current-date-note">
+  <p>Answer checked against Chrome stable behavior • March 2026</p>
+</div>
+
+</body>
+</html>
