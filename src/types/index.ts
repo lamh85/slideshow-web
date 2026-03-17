@@ -1,8 +1,26 @@
+declare global {
+  interface Window {
+    showDirectoryPicker: () => Promise<FileSystemDirectoryHandle>
+  }
+
+  interface FileSystemDirectoryHandle {
+    values: () => AsyncIterable<FileSystemHandle>
+    getFileHandle: (
+      name: string,
+      options?: FileSystemGetFileOptions
+    ) => Promise<FileSystemFileHandle>
+  }
+
+  interface FileSystemFileHandle {
+    getFile: () => Promise<File>
+  }
+}
+
 export interface Image {
   blob: string
   name: string
   timeStamp: string
-  fileData: FileSystemFileEntry
+  fileData: File
 }
 
 type EXIFCordinate = [D: number, M: number, S: number]
